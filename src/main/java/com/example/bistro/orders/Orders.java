@@ -1,124 +1,77 @@
 package com.example.bistro.orders;
 
+import com.example.bistro.employee.Employee;
+import com.example.bistro.members.Members;
+import com.example.bistro.ordersDetails.OrderDetails;
+import com.example.bistro.seats.Seats;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
+@Setter
+@Getter
 @Entity
 @Table(name = "Orders")
 public class Orders {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer ID;
+    //PK
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Integer ID;
 
-	private Integer ordersSumPrice;
+    //欄位
+        //訂單資訊
+            private String  ordersName;
+            private String  ordersTel;
+            private String  eatStatus;
+            private Integer ordersSumPrice;
+            private Integer pointGetted;
+            private String ordersStatus;
 
-	private Integer pointGetted;
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+            @Temporal(TemporalType.TIMESTAMP)
+            private Date createdAt;
 
-	private String ordersStatus;
-	
-	private String ordersName;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // 前端輸入輸出時的格式對應，若須強制轉換格式，el 須使用雙層大括號
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date createdAt;
+        //付款資訊
+            private String paymentWay;
+            private String paymentStatus;
 
-	private String paymentWay;
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+            @Temporal(TemporalType.TIMESTAMP)
+            private Date paymentTime;
 
-	private String paymentStatus;
+    //FK
+        //多對一：多個訂單可以來自同一個會員
+            @ManyToOne
+            @JoinColumn(name = "memberId")
+            private Members members;
+        //多對一：多個訂單可以來自同一個桌號
+            @ManyToOne
+            @JoinColumn(name = "seatsId")
+            private Seats seats;
+        //多對一：多個訂單可以來自同一個員工處理
+            @ManyToOne
+            @JoinColumn(name = "employeeId")
+            private Employee employee;
+        //一對多：一筆訂單會有多筆訂單詳情
+            @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL, orphanRemoval = true)
+            private List<OrderDetails> orderDetails = new ArrayList<>();  // 訂單明細
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // 前端輸入輸出時的格式對應，若須強制轉換格式，el 須使用雙層大括號
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date paymentTime;
 
-	public Orders() {
 
-	}
+    public Orders() {}
 
-	public String getOrdersName() {
-		return ordersName;
-	}
 
-	public void setOrdersName(String ordersName) {
-		this.ordersName = ordersName;
-	}
 
-	public Integer getID() {
-		return ID;
-	}
 
-	public void setID(Integer iD) {
-		ID = iD;
-	}
-
-	public Integer getOrdersSumPrice() {
-		return ordersSumPrice;
-	}
-
-	public void setOrdersSumPrice(Integer ordersSumPrice) {
-		this.ordersSumPrice = ordersSumPrice;
-	}
-
-	public Integer getPointGetted() {
-		return pointGetted;
-	}
-
-	public void setPointGetted(Integer pointGetted) {
-		this.pointGetted = pointGetted;
-	}
-
-	public String getOrdersStatus() {
-		return ordersStatus;
-	}
-
-	public void setOrdersStatus(String ordersStatus) {
-		this.ordersStatus = ordersStatus;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public String getPaymentWay() {
-		return paymentWay;
-	}
-
-	public void setPaymentWay(String paymentWay) {
-		this.paymentWay = paymentWay;
-	}
-
-	public String getPaymentStatus() {
-		return paymentStatus;
-	}
-
-	public void setPaymentStatus(String paymentStatus) {
-		this.paymentStatus = paymentStatus;
-	}
-
-	public Date getPaymentTime() {
-		return paymentTime;
-	}
-
-	public void setPaymentTime(Date paymentTime) {
-		this.paymentTime = paymentTime;
-	}
 
 }
