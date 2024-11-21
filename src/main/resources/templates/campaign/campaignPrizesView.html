@@ -158,6 +158,7 @@ body .modal .modal-content form textarea {
 									<th>獎品圖片</th>
 									<th>獎品數量</th>
 									<th>獎品描述</th>
+									<th>中獎機率</th>
 									<th>活動名稱</th>
 									<th>操作</th>
 								</tr>
@@ -171,6 +172,14 @@ body .modal .modal-content form textarea {
 										style="max-width: 100px;" /></td>
 									<td th:text="${prize.prizeQuantity}"></td>
 									<td th:text="${prize.prizeDescription}"></td>
+									<td
+										th:text="${#numbers.formatDecimal(prize.probability, 1, 2) + '%'}"
+										th:style="${
+									        prize.probability >= 50 ? 'color: red' :
+									        prize.probability >= 10 ? 'color: green' :
+									        'color: blue'
+									    }">
+									</td>
 									<td th:text="${prize.campaign.campaignTitle}"></td>
 									<td>
 										<button type="button" id="edit" th:data-id="${prize.id}"
@@ -178,6 +187,7 @@ body .modal .modal-content form textarea {
 											th:data-quantity="${prize.prizeQuantity}"
 											th:data-description="${prize.prizeDescription}"
 											th:data-campaign-id="${prize.campaign.id}"
+											th:data-probability="${prize.probability}"
 											onclick="openEditModal(this)">編輯</button>
 
 										<form th:action="@{/Bistro/campaign/prize/delete}"
@@ -236,6 +246,11 @@ body .modal .modal-content form textarea {
 								<span class="title">獎品描述</span>
 								<textarea name="prizeDescription" required></textarea>
 							</div>
+
+							<div class="question">
+								<span class="title">中獎機率</span> <input type="number"
+									name="probability" required min="0" max="100" step="0.01" />
+							</div>
 						</fieldset>
 
 						<div id="buttonbox">
@@ -274,8 +289,8 @@ body .modal .modal-content form textarea {
 							</div>
 
 							<div class="question">
-									 <span class="title">獎品圖片</span> <input
-									type="file" name="prizeImg" accept="image/*" />
+								<span class="title">獎品圖片</span> <input type="file"
+									name="prizeImg" accept="image/*" />
 							</div>
 
 							<div class="question">
@@ -286,6 +301,11 @@ body .modal .modal-content form textarea {
 							<div class="question">
 								<span class="title">獎品描述</span>
 								<textarea id="prizeDescription" name="prizeDescription" required></textarea>
+							</div>
+							
+							<div class="question">
+								<span class="title">中獎機率</span> <input type="number"
+									id="probability" name="probability" required min="0" max="100" step="0.01" />
 							</div>
 						</fieldset>
 
@@ -342,6 +362,7 @@ body .modal .modal-content form textarea {
 		    document.getElementById("prizeQuantity").value = button.dataset.quantity;
 		    document.getElementById("prizeDescription").value = button.dataset.description;
 		    document.getElementById("campaignSelect").value = button.dataset.campaignId;
+		    document.getElementById("probability").value = button.dataset.probability;
 		}      
 	      
       

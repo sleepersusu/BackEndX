@@ -1,127 +1,93 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>導覽列</title>
+<meta charset="UTF-8">
+<title>導覽列</title>
 </head>
 <body>
-    <div id="left">
-        <nav id="sidebar">
-            <div id="logo">
-                <img th:src="@{/images/logo.jpg}" alt="商店logo" />
-            </div>
-            <div id="sidebox">
-                <div id="menubox">
-                    <ul class="menu">
-                        <li class="menuitem">
-                            <a th:href="@{/}">
-                                <i class="fa-solid fa-house" style="color: #ffffff"></i> 首頁
-                            </a>
-                        </li>
+	<div id="left">
+		<nav id="sidebar">
+			<div id="logo">
+				<img th:src="@{/images/logo.jpg}" alt="商店logo" />
+			</div>
+			<div id="sidebox">
+				<div id="menubox">
+					<ul class="menu">
+						<li class="menuitem"><a th:href="@{/}"> <i
+								class="fa-solid fa-house" style="color: #ffffff"></i> 首頁
+						</a></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/product}">
-                                <i class="fa-solid fa-whiskey-glass"></i> 商品管理
-                            </a>
-                        </li>
+						<li class="menuitem"><a th:href="@{/product}"> <i
+								class="fa-solid fa-whiskey-glass"></i> 商品管理
+						</a></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/member}">
-                                <i class="fa-solid fa-address-card"></i> 會員管理
-                            </a>
-                            <ul class="dropdown">
-                            </ul>
-                        </li>
+						<li class="menuitem"><a th:href="@{/member}"> <i
+								class="fa-solid fa-address-card"></i> 會員管理
+						</a>
+							<ul class="dropdown">
+							</ul></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/reservation}">
-                                <i class="fa-regular fa-calendar-check"></i> 訂位管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                </li>
-                            </ul>
-                        </li>
+						<li class="menuitem"><a th:href="@{/reservation}"> <i
+								class="fa-regular fa-calendar-check"></i> 訂位管理
+						</a>
+							<ul class="dropdown">
+								<li></li>
+							</ul></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/order}">
-                                <i class="fa-regular fa-clipboard"></i> 訂單管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                </li>
-                            </ul>
-                        </li>
+						<li class="menuitem"><a th:href="@{/order}"> <i
+								class="fa-regular fa-clipboard"></i> 訂單管理
+						</a>
+							<ul class="dropdown">
+								<li></li>
+							</ul></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/Bistro/campaign/findAll}">
-                                <i class="fa-regular fa-face-laugh-squint"></i> 活動管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                    <a th:href="@{/Bistro/campaign/findAll}">
-                                        <span class="arrow">&#9660;</span> 活動資訊
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/Bistro/campaign/prize/findAll}">
-                                        <span class="arrow">&#9660;</span> 獎品資訊
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/Bistro/campaign/chance/findAll}">
-                                        <span class="arrow">&#9660;</span> 抽獎資訊
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/Bistro/campaign/winner/findAll}">
-                                        <span class="arrow">&#9660;</span> 得獎者資訊
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+						<li class="menuitem"><a th:href="@{/Bistro/campaign/findAll}">
+								<i class="fa-regular fa-face-laugh-squint"></i> 活動管理
+						</a>
+							<ul class="dropdown">
+								<li><a th:href="@{/Bistro/campaign/findAll}"> <span
+										class="arrow">&#9660;</span> 活動資訊
+								</a></li>
+								<li><a th:href="@{/Bistro/campaign/prize/findAll}"> <span
+										class="arrow">&#9660;</span> 獎品資訊
+								</a></li>
+								<li><a th:href="@{/Bistro/campaign/chance/findAll}"> <span
+										class="arrow">&#9660;</span> 抽獎資訊
+								</a></li>
+								<li><a th:href="@{/Bistro/campaign/winner/findAll}"> <span
+										class="arrow">&#9660;</span> 得獎者資訊
+								</a></li>
+							</ul></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/supply}">
-                                <i class="fa-solid fa-cart-flatbed"></i> 採購管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                </li>
-                            </ul>
-                        </li>
+						<li class="menuitem"><a th:href="@{/supply}"> <i
+								class="fa-solid fa-cart-flatbed"></i> 採購管理
+						</a>
+							<ul class="dropdown">
+								<li></li>
+							</ul></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/comment}">
-                                <i class="fa-solid fa-comment"></i> 評論管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                </li>
-                            </ul>
-                        </li>
+						<li class="menuitem"><a th:href="@{/comment}"> <i
+								class="fa-solid fa-comment"></i> 評論管理
+						</a>
+							<ul class="dropdown">
+								<li></li>
+							</ul></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/points}">
-                                <i class="fa-solid fa-user"></i> 點數管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                    <a th:href="@{/points/info}">
-                                        <span class="arrow">&#9660;</span> 點數資訊
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/points/history}">
-                                        <span class="arrow">&#9660;</span> 兌換歷史
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
+						<li class="menuitem"><a th:href="@{/points}"> <i
+								class="fa-solid fa-user"></i> 點數管理
+						</a>
+							<ul class="dropdown">
+								<li><a th:href="@{/points/info}"> <span class="arrow">&#9660;</span>
+										點數資訊
+								</a></li>
+								<li><a th:href="@{/points/history}"> <span
+										class="arrow">&#9660;</span> 兌換歷史
+								</a></li>
+							</ul></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
 </body>
 </html>
