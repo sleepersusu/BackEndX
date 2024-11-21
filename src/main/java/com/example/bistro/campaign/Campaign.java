@@ -32,6 +32,9 @@ public class Campaign {
 	@Column(name = "campaignType")
 	private String campaignType;
 	
+	@Column(name = "minOrderAmount")
+	private Integer minOrderAmount;
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "startDate")
@@ -58,6 +61,14 @@ public class Campaign {
 	}
 
 	public Campaign() {
+	}
+
+	public Integer getMinOrderAmount() {
+		return minOrderAmount;
+	}
+
+	public void setMinOrderAmount(Integer minOrderAmount) {
+		this.minOrderAmount = minOrderAmount;
 	}
 
 	public Integer getId() {
