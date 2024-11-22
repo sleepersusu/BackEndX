@@ -103,10 +103,7 @@ public class MenuController {
 		 // 查詢所有菜單
 	    List<Menu> menuList = menuService.findAllMenu();
 	    
-	    // 查詢所有菜品的平均分數
-	    List<Object[]> avgScores = menuService.countAvgScores();
-	    
-	    List<String> lowStockItems = new ArrayList<>();
+	     List<String> lowStockItems = new ArrayList<>();
 
 	    // 只檢查上架庫存是否不足 已下架庫存不理他
 	    for (Menu menu : menuList) {
@@ -114,9 +111,17 @@ public class MenuController {
 	            lowStockItems.add(menu.getProductName());
 	        }
 	    }
-
-	    // 將庫存不足的商品名稱傳遞給前端
+	    
+	      // 將庫存不足的商品名稱傳遞給前端
 	    model.addAttribute("lowStockItems", lowStockItems);
+	    
+	    
+	    // 查詢所有菜品的平均分數
+	    List<Object[]> avgScores = menuService.countAvgScores();
+	    
+	   
+
+	  
 	    
 	    // 創建一個 Map 用來存儲菜品名稱和平均分數
 	    Map<String, Double> avgScoreMap = new HashMap<>();

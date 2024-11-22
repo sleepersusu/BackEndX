@@ -1,12 +1,19 @@
-package com.example.bistro.orderDetails;
+package com.example.bistro.members;
 
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.bistro.comment.Comment;
+import com.example.bistro.orders.Orders;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -49,11 +56,13 @@ public class Members {
 	
 	
 	
-	@OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private List <Orders> orders;
 	
 	
-	
+	@JsonIgnore
+	 @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	 private List<Comment> comments =new ArrayList<Comment>();  // 用於映射 Comment 實體中的 member 
 
 	@PrePersist // 當物件要轉換成 Persistent 狀態以前，執行這個方法
 	public void onCreate() {
@@ -182,6 +191,26 @@ public class Members {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+
+	public List<Orders> getOrders() {
+		return orders;
+	}
+
+
+	public void setOrders(List<Orders> orders) {
+		this.orders = orders;
+	}
+
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 }

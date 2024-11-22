@@ -1,7 +1,9 @@
-package com.example.bistro.orderDetails;
+package com.example.bistro.jobTitle;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.bistro.employee.Employee;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

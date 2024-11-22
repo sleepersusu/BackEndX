@@ -1,6 +1,8 @@
-package com.example.bistro.orderDetails;
+package com.example.bistro.seats;
 
 import java.util.List;
+
+import com.example.bistro.orders.Orders;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

@@ -1,4 +1,5 @@
-package com.example.bistro.orderDetails;
+package com.example.bistro.employee;
+
 
 
 
@@ -6,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.example.bistro.jobTitle.JobTitle;
+import com.example.bistro.orders.Orders;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
