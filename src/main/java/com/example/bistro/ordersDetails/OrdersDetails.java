@@ -2,19 +2,15 @@ package com.example.bistro.ordersDetails;
 
 import com.example.bistro.menu.Menu;
 import com.example.bistro.orders.Orders;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.sql.Timestamp;
 
 @Setter
 @Getter
 @Entity
 @Table(name = "OrderDetails")
-public class OrderDetails {
+public class OrdersDetails {
 
     //PK
             @Id
@@ -38,6 +34,6 @@ public class OrderDetails {
             private Menu menu;  // 訂單明細與菜單商品關聯
 
 
-        public OrderDetails() {};
+        public OrdersDetails() {};
 
 }

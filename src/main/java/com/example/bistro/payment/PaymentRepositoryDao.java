@@ -1,4 +1,6 @@
 package com.example.bistro.payment;
 
-public interface PaymentRepositoryDao {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PaymentRepositoryDao extends JpaRepository<Payment, Integer> {
 }

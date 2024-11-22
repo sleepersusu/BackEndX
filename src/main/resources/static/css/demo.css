@@ -392,6 +392,10 @@ text-align: left;
 
 /* form */
 
+fieldset{
+	padding: 0rem 1rem;
+}
+
 
 body .modal {
     display: none;

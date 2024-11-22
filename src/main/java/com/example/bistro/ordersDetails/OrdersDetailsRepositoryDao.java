@@ -1,4 +1,6 @@
 package com.example.bistro.ordersDetails;
 
-public interface OrdersDetailsRepositoryDao {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrdersDetailsRepositoryDao extends JpaRepository<OrdersDetails,Integer> {
 }

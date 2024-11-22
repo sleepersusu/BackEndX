@@ -1,6 +1,6 @@
 package com.example.bistro.menu;
 
-import com.example.bistro.ordersDetails.OrderDetails;
+import com.example.bistro.ordersDetails.OrdersDetails;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,12 +16,12 @@ import java.util.List;
 @Table(name = "Menu")
 public class Menu {
 
-    //PK
+  //PK
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Integer ID;
 
-    //欄位
+  //欄位
         //產品資訊
             private String productCategory;
             private String productName ;
@@ -42,10 +42,10 @@ public class Menu {
             @Temporal(TemporalType.TIMESTAMP)
             private Date createdAt;
 
-    //FK
+   //FK
         //一對多：一個菜品可以出現在多筆訂單中
             @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
-            private List<OrderDetails> orderDetails;  // 訂單明細
+            private List<OrdersDetails> ordersDetails;  // 訂單明細
 
     public Menu() {};
 }
