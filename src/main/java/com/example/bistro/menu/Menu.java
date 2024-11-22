@@ -56,11 +56,11 @@ public class Menu {
 	private Date createdAt;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
 	private List<OrderDetails> menuId; // 用於映射 OrderDetails 實體中的 menu
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
 	private List<Comment> comments = new ArrayList<Comment>(); // 用於映射 Comment 實體中的 menu
 
 	@PrePersist // 當物件要轉換成 Persistent 狀態以前，執行這個方法

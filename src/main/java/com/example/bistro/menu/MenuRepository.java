@@ -23,8 +23,8 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 	Menu findByProductName(String productName);
 
 	//11/19修改
-	@Query("SELECT odt.menu.productName AS productName, COALESCE(AVG(odt.commentRating), 0.0) AS avgScore " +
-		       "FROM OrderDetails odt GROUP BY odt.menu.productName")
+	@Query("SELECT c.menu.productName AS productName, COALESCE(AVG(c.commentRating), 0.0) AS avgScore " +
+		       "FROM Comment c GROUP BY c.menu.productName")
 		List<Object[]> countAvgScores();  // 返回 Object[] 是因為查詢會返回兩個值，菜品名稱和平均分數
 	
 		//11/19修改
@@ -32,11 +32,11 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 		List<Menu> findMenuByStatusIsSold();  
 	
 	@Query("""
-		    SELECT odt.menu.ID, odt.menu.productName, COALESCE(AVG(odt.commentRating), 0.0) AS avgScore
-		    FROM OrderDetails odt
-		    JOIN odt.menu 
-		    WHERE odt.menu.menuStatus = '上架'
-		    GROUP BY odt.menu.ID, odt.menu.productName
+		    SELECT c.menu.ID, c.menu.productName, COALESCE(AVG(c.commentRating), 0.0) AS avgScore
+		    FROM Comment c
+		    JOIN c.menu 
+		    WHERE c.menu.menuStatus = '上架'
+		    GROUP BY c.menu.ID, c.menu.productName
 		    """)
 		List<Object[]> countAvgScoresMenuIsSold();  
 

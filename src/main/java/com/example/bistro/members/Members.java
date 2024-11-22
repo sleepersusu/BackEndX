@@ -61,7 +61,7 @@ public class Members {
 	
 	
 	@JsonIgnore
-	 @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	 @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 	 private List<Comment> comments =new ArrayList<Comment>();  // 用於映射 Comment 實體中的 member 
 
 	@PrePersist // 當物件要轉換成 Persistent 狀態以前，執行這個方法
