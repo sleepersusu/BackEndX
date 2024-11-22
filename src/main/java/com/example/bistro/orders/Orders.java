@@ -33,7 +33,7 @@ public class Orders {
 	private Integer ID;
 
 	private Integer ordersSumPrice;
-
+	
 	private Integer pointGetted;
 
 	private String ordersStatus;
