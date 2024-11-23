@@ -15,6 +15,7 @@ public class OrdersDetails {
     //PK
             @Id
             @GeneratedValue(strategy = GenerationType.IDENTITY)
+            @Column(name = "ID")
             private Integer ID;
 
     //欄位名稱

@@ -44,11 +44,14 @@
                         </li>
 
                         <li class="menuitem">
-                            <a th:href="@{/order}">
+                            <a th:href="@{/Bistro/Orders/findAll}">
                                 <i class="fa-regular fa-clipboard"></i> 訂單管理
                             </a>
                             <ul class="dropdown">
                                 <li>
+                                    <a th:href="@{/Bistro/ordersDetails/findAll}">
+                                        <span class="arrow">&#9660;</span> 訂單詳情
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -81,15 +84,7 @@
                             </ul>
                         </li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/supply}">
-                                <i class="fa-solid fa-cart-flatbed"></i> 採購管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                </li>
-                            </ul>
-                        </li>
+
 
                         <li class="menuitem">
                             <a th:href="@{/comment}">

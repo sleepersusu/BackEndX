@@ -7,7 +7,7 @@ import lombok.Data;
 public class CartCheck {
     private String customerName;
     private String customerTel;
-    private String seatStatus;
+    private String seatType;
     private Integer totalPrice;
     private Integer pointEarned;
     private String specialRequest;

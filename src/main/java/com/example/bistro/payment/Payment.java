@@ -18,6 +18,7 @@ public class Payment {
   //PK
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "ID")
         private Integer ID;
 
 
@@ -30,6 +31,14 @@ public class Payment {
         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         @Temporal(TemporalType.TIMESTAMP)
         private Date createdAt;
+
+        //後面就不用set時間
+        @PrePersist
+        public void onCreate() {
+            if(createdAt == null) {
+                createdAt = new Date();
+            }
+        }
 
 
    //FK

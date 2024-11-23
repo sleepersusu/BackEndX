@@ -33,7 +33,7 @@ public class CartCheckService {
             Orders order = new Orders();
             order.setOrdersName(cartCheck.getCustomerName());
             order.setOrdersTel(cartCheck.getCustomerTel());
-            order.setSeatStatus(cartCheck.getSeatStatus());
+            order.setSeatType(cartCheck.getSeatType());
             order.setOrdersSumPrice(cartCheck.getTotalPrice());
             order.setOrdersStatus("已建立");
             order.setPointGetted(cartCheck.getPointEarned());

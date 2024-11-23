@@ -20,6 +20,7 @@ public class Cart {
 //PK
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "ID")
         private Integer ID;
 
 
@@ -37,7 +38,7 @@ public class Cart {
 //FK
     // 一對一：一個會員只會有一台購物車
         @OneToOne
-        @JoinColumn(name = "membersId", referencedColumnName = "ID", nullable = true)
+        @JoinColumn(name = "membersId", referencedColumnName = "ID", nullable = true , unique = true)
         private Members members;  // 與 Member 表的多對一關係，允許為 NULL
     //多對一：多個產品可以同時出現在一台購物車中
         @ManyToOne
