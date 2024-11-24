@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>訂單管理 - DINEEASE餐廳管理系統</title>
+
+<link rel="icon" th:href="@{/images/favicon.ico}" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+	rel="stylesheet" />
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<link rel="stylesheet" th:href="@{/css/demo.css}" />
+<style th:inline="css">
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
+
+#edit, #delete {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+#dt-search-0 {
+	margin-right: 2rem
+}
+
+#dt-search-0:focus {
+	outline: none;
+}
+
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
+
+#addData:hover {
+	background-color: #2894FF;
+}
+
+.modal-content {
+	min-width: 700px;
+	height: 700px;
+	overflow: auto;
+}
+
+body .modal .modal-content form textarea {
+	width: 350px
+}
+
+#save {
+	background-color: #0071e3;
+	border-radius: 10px;
+	color: white;
+	width: auto;
+	border: none;
+	font-size: 1rem;
+	padding: 0.4rem 2rem;
+}
+
+#save:hover {
+	background-color: #2894FF;
+}
+
+#reset {
+	border-radius: 10px;
+	background-color: white;
+	color: #0071e3;
+	border: 1px solid #0071e3;
+	height: auto;
+	width: auto;
+	font-size: 1rem;
+	padding: 0.3rem 2rem;
+}
+
+#reset:hover {
+	text-decoration: none;
+}
+
+#buttonbox {
+	margin-top: 0.5rem
+}
+</style>
+
+
+</head>
+
+<body>
+	<!-- DataTable Scripts -->
+	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
+	<div id="page">
+
+		<div th:replace="~{layout/navbar}"></div>
+		<div id="right">
+			<div th:replace="~{layout/headerlogout.html}"></div>
+
+			<main>
+				<h2>訂單管理</h2>
+				<section id="workspace">
+					<div>
+						<button type="submit" class="dataButton" id="addData">
+							新增訂單</button>
+					</div>
+				</section>
+
+
+
+				<section>
+					<div>
+						<!--套件功能 class="display" 務必保留 如果資料需要跳行顯示可刪除nowrap-->
+						<table id="table" class="display">
+							<thead>
+								<tr>
+									<th>訂單編號</th>
+									<th>會員編號</th>
+									<th>姓名</th>
+									<th>電話</th>
+									<th>用餐方式</th>
+									<th>總金額</th>
+									<th>獲得點數</th>
+									<th>訂單狀態</th>
+									<th>特殊要求</th>
+									<th>付款狀態</th>
+									<th>建立時間</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="event-list">
+								<tr  th:each="orders:${allOrders}">
+									<td th:text="${orders.ID}"></td>
+									<td th:text="${orders.members != null ? orders.members.id : '非會員'}"></td>
+									<td th:text="${orders.ordersName}"></td>
+									<td th:text="${orders.ordersTel}"></td>
+									<td th:text="${orders.seatType}"></td>
+									<td th:text="${orders.ordersSumPrice}"></td>
+									<td th:text="${orders.pointGetted}"></td>
+									<td th:text="${orders.ordersStatus}"></td>
+									<td th:text="${orders.ordersRequest}"></td>
+									<td th:text="${orders.latestPaymentStatus}"></td>
+									<td th:text="${orders.createdAt}"></td>
+									<td>
+										<form th:action="@{/Bistro/Orders/deleteOrders}" method="post"
+											style="display: inline;">
+											<input type="hidden" name="id" th:value="${orders.ID}">
+											<button type="submit" id="delete"
+												onclick="return confirm('確定要刪除嗎？');">刪除</button>
+										</form>
+									</td>
+								</tr>
+								<tr th:if="${#lists.isEmpty(allOrders)}">
+									<td colspan="8">沒有活動資料</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</main>
+
+			<!--  新增訂單視窗 -->
+			<div id="addEventModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>新增訂單</h1>
+					<form th:action="@{/Bistro/Orders/createOrders}" method="post"
+						id="dataForm">
+						<fieldset>
+							<!-- 區域1 -->
+
+							<legend style="margin-bottom: 1rem; font-weight: bold">
+								訂單資訊 </legend>
+
+							<!-- 訂購人姓名 -->
+							<div class="question">
+								<label for="ordersName" class="form-label">
+									<span class="title">姓名</span>
+								</label>
+								<input type="text" id="ordersName"
+									name="ordersName"
+									value="" placeholder="請輸入訂購人姓名" required
+									aria-required="true"
+								/>
+							</div>
+
+							<!-- 聯絡電話 -->
+							<div class="question">
+								<label for="ordersTel" class="form-label">
+									<span class="title">電話</span>
+								</label>
+								<input type="text" id="ordersTel"
+									   name="ordersTel"
+									   value="" placeholder="請輸入訂購人電話" required
+									   aria-required="true"
+								/>
+							</div>
+
+							<div class="question">
+								<label for="seatType" class="form-label">
+									<span class="title">用餐方式</span>
+								</label>
+								<select class="form-select" id="seatType" name="seatType" required>
+									<option value="內用">內用</option>
+									<option value="外帶">外帶</option>
+								</select>
+							</div>
+
+
+							<div class="question">
+								<label for="seatsId" class="form-label">
+									<span class="title">座位編號 </span>
+								</label>
+								<input type="number"
+									   class="form-control"
+									   id="seatsId"
+									   name="seatsId"
+									   value="0"
+									   min="0"
+									   max="20"
+								>
+							</div>
+
+							<!-- 總金額 -->
+							<div class="question">
+								<label for="ordersSumPrice" class="form-label">
+									<span class="title">總金額</span>
+								</label>
+								<input type="number" id="ordersSumPrice"
+									   name="ordersSumPrice"
+									   value="" placeholder="請輸入總金額" required
+									   aria-required="true"
+								/>
+							</div>
+							<!-- 訂單狀態 -->
+							<div class="question">
+								<label for="ordersStatus" class="form-label">
+									<span class="title">訂單狀態</span>
+								</label>
+								<select class="form-select" id="ordersStatus" name="ordersStatus" required>
+									<option value="已確認">已確認</option>
+									<option value="已取消">已取消</option>
+								</select>
+							</div>
+
+
+
+							<div class="question">
+								<label for="ordersRequest" class="form-label">
+									<span class="title">特殊要求</span>
+								</label>
+								<textarea name="ordersRequest" class="form-control" id="ordersRequest" >無</textarea>
+							</div>
+
+							<!-- 付款資訊 -->
+							<div class="question">
+								<label for="paymentWay" class="form-label">
+									<span class="title">付款資訊</span>
+								</label>
+								<select class="form-select" id="paymentWay" name="paymentWay" required>
+									<option value="現金">現金</option>
+								</select>
+							</div>
+							<!-- 付款狀態 -->
+							<div class="question">
+								<label for="paymentWay" class="form-label">
+									<span class="title">付款狀態</span>
+								</label>
+								<select class="form-select" id="paymentStatus" name="paymentStatus" required>
+									<option value="已完成">已完成</option>
+									<option value="已取消">已取消</option>
+								</select>
+							</div>
+
+							<!-- 付款金額 -->
+							<div class="question">
+								<label for="paymentPrice" class="form-label">
+									<span class="title">付款金額</span>
+								</label>
+								<input type="number" id="paymentPrice"
+									   name="paymentPrice"
+									   value="" placeholder="請輸入付款金額" required
+									   aria-required="true"
+								/>
+							</div>
+						</fieldset>
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton">儲存</button>
+							<button type="reset" id="reset" class="formbutton">重設</button>
+						</div>
+					</form>
+				</div>
+				<!-- modal-content -->
+			</div>
+
+			<footer> &copy; Made by TeamWork </footer>
+		</div>
+	</div>
+
+
+
+	<script>
+		$("#table").DataTable({
+			scrollX : "90%",
+			scrollY : "500px",
+			paging: true, // 如果希望有分頁功能
+			searching: true, // 如果需要啟用搜尋功能
+			responsive: true, // 如果希望在不同尺寸螢幕上調整表格
+			
+		})		
+		document.getElementById('ordersSumPrice').addEventListener('input',function () {
+			const totalPrice = this.value;
+			document.getElementById('paymentPrice').value = totalPrice>0 ? totalPrice:'';
+		});
+		
+		// jquery寫法 end
+		
+		document.getElementById("addData").addEventListener("click", () => {
+        	document.getElementById("addEventModal").style.display = "block";
+     	 });
+
+		document.querySelectorAll(".close").forEach(closeButton => {
+		    closeButton.addEventListener("click", () => {
+		        document.getElementById("addEventModal").style.display = "none";
+		        document.getElementById("addEventModal2").style.display = "none";
+		    });
+		});
+
+	      window.onclick = function (event) {
+	        const modal = document.getElementById("addEventModal");
+	        const modal2 = document.getElementById("addEventModal2");
+	        if (event.target === modal || event.target === modal2) {
+	          document.getElementById("addEventModal").style.display = "none";
+	          document.getElementById("addEventModal2").style.display = "none";
+	        }
+	      };
+	      
+
+	      
+      
+      
+	</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <style>
+    header > span {
+      padding-left: 10px;
+      padding-right: 10px;
+      border: 1px solid black;
+      border-radius: 20px;
+    }
+  </style>
+  <body>
+    <header>
+      <span id="showLogoutTime"></span>
+	      <button id="logout">
+	        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+	      </button>
+    </header>
+    <script>
+      function getRemainingTime() {
+        fetch("/api/remainingTime")
+          .then((response) => {
+            // 確保 response.ok，這樣我們才會處理 JSON 資料
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json(); // 解析 JSON
+          })
+          .then((data) => {
+            let remainingTime = parseInt(data / 1000);
+            document.getElementById("showLogoutTime").innerText =
+              remainingTime + " 秒";
+
+            if (remainingTime == 0) {
+              alert("超過時間無操作，系統即將登出");
+              window.location.href = '/';
+              clearInterval(countdownTimer);
+            }
+          })
+          .catch((error) => {
+            console.error("錯誤:", error);
+          });
+      }
+      let countdownTimer = setInterval(getRemainingTime, 1000);
+      let logoutBtn =document.getElementById('logout') 
+      logoutBtn.addEventListener('click',function(){
+        window.location.href = '/logout';
+      })
+    </script>
+  </body>
+</html>

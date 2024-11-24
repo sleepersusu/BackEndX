@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>獎品管理 - DINEEASE餐廳管理系統</title>
+
+    <link rel="icon" th:href="@{/images/favicon.ico}" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" th:href="@{/css/demo.css}" />
+    
+<style>
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
+
+#edit, #delete {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+#dt-search-0 {
+	margin-right: 2rem
+}
+
+#dt-search-0:focus {
+	outline: none;
+}
+
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
+
+#addData:hover {
+	background-color: #2894FF;
+}
+
+.modal-content {
+	min-width: 400px;
+	overflow: auto;
+}
+
+body .modal .modal-content form textarea {
+	width: 350px
+}
+
+#save {
+	background-color: #0071e3;
+	border-radius: 10px;
+	color: white;
+	width: auto;
+	border: none;
+	font-size: 1rem;
+	padding: 0.3rem 1.35rem;
+}
+
+#save:hover {
+	background-color: #2894FF;
+}
+
+#reset {
+	border-radius: 10px;
+	background-color: white;
+	color: #0071e3;
+	border: 1px solid #0071e3;
+	height: auto;
+	width: auto;
+	font-size: 1rem;
+	padding: 0.25rem 1.25rem;
+}
+
+#reset:hover {
+	text-decoration: none;
+}
+
+#buttonbox {
+	margin-top: 0.5rem
+}
+</style>
+</head>
+
+<body>
+    <div id="page">
+        <div th:replace="~{layout/navbar}"></div>
+
+        <div id="right">
+			<div th:replace="~{layout/headerlogout.html}"></div>
+
+            <main>
+                <h2>獎品兌換紀錄</h2>
+                <section id="workspace">
+                    <div>
+                        <button type="button" class="dataButton" id="addData">新增兌換紀錄</button>
+                    </div>
+                </section>
+
+                <section>
+                    <div>
+                        <table id="table" class="display">
+                            <thead>
+								<tr>
+									<th>兌換ID</th>
+									<th>會員ID</th>
+									<th>會員名稱</th>
+									<th>獎品ID</th>
+									<th>獎品名稱</th>
+									<th>兌換所用積分</th>
+									<th>兌換日期</th>
+								</tr>
+                            </thead>
+                            <tbody id="event-list">
+                                <tr th:each="result : ${allPointsRecords}">
+                                    <td th:text="${result[0]}">兌換ID</td>
+                                    <td th:text="${result[1]}">會員ID</td>
+                                    <td th:text="${result[2]}">會員名稱</td>
+                                    <td th:text="${result[3]}">獎品ID</td>
+                                    <td th:text="${result[4]}">獎品名稱</td>
+                                    <td th:text="${result[5]}">兌換所用積分</td>
+                                    <td th:text="${result[6]}">兌換日期</td>
+                                </tr>
+                                <tr th:if="${allPointsRecords == null || allPointsRecords.isEmpty()}">
+								    <td colspan="9">沒有獎品資料</td>
+								</tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+
+
+            <footer>&copy; Made by TeamWork</footer>
+        </div>
+    </div>
+
+    <script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
+    <script>
+        $("#table").DataTable({
+            scrollX : "90%",
+            scrollY : "500px",
+        });
+
+        document.getElementById("addData").addEventListener("click", () => {
+            document.getElementById("addEventModal").style.display = "block";
+        });
+
+        document.querySelectorAll(".close").forEach(closeButton => {
+            closeButton.addEventListener("click", () => {
+                document.getElementById("addEventModal").style.display = "none";
+                document.getElementById("addEventModal2").style.display = "none";
+            });
+        });
+
+        window.onclick = function (event) {
+            const modal = document.getElementById("addEventModal");
+            const modal2 = document.getElementById("addEventModal2");
+            if (event.target == modal || event.target == modal2) {
+                modal.style.display = "none";
+                modal2.style.display = "none";
+            }
+        };
+
+        function openEditModal(PointPrizes) {
+		    document.getElementById("addEventModal2").style.display = "block";
+		
+		    document.getElementById("editPointPrizesId").value = PointPrizes.id;
+		
+		    document.getElementById("editPointPrizesName").value = PointPrizes.pointPrizesName;
+		    document.getElementById("editPointPrizesPoints").value = PointPrizes.pointPrizesPoints;
+		    document.getElementById("editPointPrizesDescription").value = PointPrizes.pointPrizesDescription;
+		    document.getElementById("editPointPrizesCount").value = PointPrizes.pointPrizesCount;
+		    document.getElementById("editPointPrizesExpiration").value = PointPrizes.pointPrizesExpiration;
+		}
+    </script>
+</body>
+</html>

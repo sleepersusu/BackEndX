@@ -1,5 +1,6 @@
 package com.example.bistro.campaignPrize;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,6 +42,9 @@ public class CampaignPrizes {
 	@Column(name = "prizeDescription")
 	private String prizeDescription;
 	
+	@Column(name = "probability", columnDefinition = "DECIMAL(5,2)")
+    private BigDecimal probability; 
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "createdAt")
@@ -58,6 +62,14 @@ public class CampaignPrizes {
 	}
 	
 	public CampaignPrizes() {
+	}
+
+	public BigDecimal getProbability() {
+		return probability;
+	}
+
+	public void setProbability(BigDecimal probability) {
+		this.probability = probability;
 	}
 
 	public Integer getId() {
