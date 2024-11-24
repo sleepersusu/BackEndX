@@ -241,8 +241,8 @@ body .modal .modal-content form textarea {
 									<span class="title">用餐方式</span>
 								</label>
 								<select class="form-select" id="seatType" name="seatType" required>
-									<option value="Indoor">內用</option>
-									<option value="Takeout">外帶</option>
+									<option value="內用">內用</option>
+									<option value="外帶">外帶</option>
 								</select>
 							</div>
 
@@ -251,7 +251,14 @@ body .modal .modal-content form textarea {
 								<label for="seatsId" class="form-label">
 									<span class="title">座位編號 </span>
 								</label>
-								<input type="number" class="form-control" id="seatsId" name="seatsId">
+								<input type="number"
+									   class="form-control"
+									   id="seatsId"
+									   name="seatsId"
+									   value="0"
+									   min="0"
+									   max="20"
+								>
 							</div>
 
 							<!-- 總金額 -->
@@ -271,8 +278,8 @@ body .modal .modal-content form textarea {
 									<span class="title">訂單狀態</span>
 								</label>
 								<select class="form-select" id="ordersStatus" name="ordersStatus" required>
-									<option value="Confirmed">已確認</option>
-									<option value="Cancelled">已取消</option>
+									<option value="已確認">已確認</option>
+									<option value="已取消">已取消</option>
 								</select>
 							</div>
 
@@ -282,7 +289,7 @@ body .modal .modal-content form textarea {
 								<label for="ordersRequest" class="form-label">
 									<span class="title">特殊要求</span>
 								</label>
-								<textarea name="ordersRequest" class="form-control" id="ordersRequest" required> </textarea>
+								<textarea name="ordersRequest" class="form-control" id="ordersRequest" >無</textarea>
 							</div>
 
 							<!-- 付款資訊 -->
@@ -291,10 +298,30 @@ body .modal .modal-content form textarea {
 									<span class="title">付款資訊</span>
 								</label>
 								<select class="form-select" id="paymentWay" name="paymentWay" required>
-									<option value="CreditCard">刷卡</option>
-									<option value="Cash">現金</option>
-									<option value="MobilePayment">行動支付</option>
+									<option value="現金">現金</option>
 								</select>
+							</div>
+							<!-- 付款狀態 -->
+							<div class="question">
+								<label for="paymentWay" class="form-label">
+									<span class="title">付款狀態</span>
+								</label>
+								<select class="form-select" id="paymentStatus" name="paymentStatus" required>
+									<option value="已完成">已完成</option>
+									<option value="已取消">已取消</option>
+								</select>
+							</div>
+
+							<!-- 付款金額 -->
+							<div class="question">
+								<label for="paymentPrice" class="form-label">
+									<span class="title">付款金額</span>
+								</label>
+								<input type="number" id="paymentPrice"
+									   name="paymentPrice"
+									   value="" placeholder="請輸入付款金額" required
+									   aria-required="true"
+								/>
 							</div>
 						</fieldset>
 						<!---------------------------底下為按鈕區---------------------------------------------- -->
@@ -317,9 +344,15 @@ body .modal .modal-content form textarea {
 		$("#table").DataTable({
 			scrollX : "90%",
 			scrollY : "500px",
+			paging: true, // 如果希望有分頁功能
+			searching: true, // 如果需要啟用搜尋功能
+			responsive: true, // 如果希望在不同尺寸螢幕上調整表格
 			
 		})		
-		
+		document.getElementById('ordersSumPrice').addEventListener('input',function () {
+			const totalPrice = this.value;
+			document.getElementById('paymentPrice').value = totalPrice>0 ? totalPrice:'';
+		});
 		
 		// jquery寫法 end
 		
@@ -343,18 +376,7 @@ body .modal .modal-content form textarea {
 	        }
 	      };
 	      
-	      function openEditModal(button) {
-			    document.getElementById("addEventModal2").style.display = "block";
-			    
-			    document.getElementById("campaignId").value = button.dataset.id;
-			    document.getElementById("campaignTitle").value = button.dataset.title;
-			    document.getElementById("campaignDescription").value = button.dataset.description;
-			    document.getElementById("campaignType").value = button.dataset.type;
-			    document.getElementById("campaignStartDate").value = button.dataset.startDate;
-			    document.getElementById("campaignEndDate").value = button.dataset.endDate;
-			    document.getElementById("note").value = button.dataset.note;
-			    document.getElementById("createdAt").value = button.dataset.createdAt;
-			}	      
+
 	      
       
       

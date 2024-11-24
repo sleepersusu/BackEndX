@@ -70,7 +70,7 @@ public class OrdersController {
 //                               @RequestParam List<Integer> menuId,
 //                               @RequestParam Integer quantities,
 //                               @RequestParam List<Integer> prices,
-                               @RequestParam Integer seatsId) {
+                               @RequestParam Integer seatsId ) {
 
         //欄位要有的值，所以表單有的可以不用有，但欄位要的一定要給他
             Orders orders = new Orders();
