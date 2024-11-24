@@ -31,7 +31,7 @@ public class Comment {
 	
 	@ManyToOne
 	@JoinColumn(name="memberId",referencedColumnName = "ID")
-	private Members member;
+	private Members members;
 	
 	
 	@ManyToOne
