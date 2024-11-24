@@ -102,18 +102,28 @@
                         </li>
 
                         <li class="menuitem">
-                            <a th:href="@{/points}">
+                            <a th:href="@{/Bistro/PointPrizes/showAll}">
                                 <i class="fa-solid fa-user"></i> 點數管理
                             </a>
                             <ul class="dropdown">
                                 <li>
-                                    <a th:href="@{/points/info}">
-                                        <span class="arrow">&#9660;</span> 點數資訊
+                                    <a th:href="@{/Bistro/PointPrizes/showAll}">
+                                        <span class="arrow">&#9660;</span>獎品管理
                                     </a>
                                 </li>
                                 <li>
-                                    <a th:href="@{/points/history}">
-                                        <span class="arrow">&#9660;</span> 兌換歷史
+                                    <a th:href="@{/Bistro/PointGet/showAll}">
+                                        <span class="arrow">&#9660;</span> 獲得積分紀錄
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/Bistro/PointsRecords/showAll}">
+                                        <span class="arrow">&#9660;</span> 獎品兌換紀錄
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/Bistro/PointsTotal/showAll}">
+                                        <span class="arrow">&#9660;</span> 會員點數資料
                                     </a>
                                 </li>
                             </ul>
