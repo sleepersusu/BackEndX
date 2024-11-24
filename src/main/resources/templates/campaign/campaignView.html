@@ -158,8 +158,10 @@ body .modal .modal-content form textarea {
 									<th>活動名稱</th>
 									<th>活動內容</th>
 									<th>活動類別</th>
+									<th>活動門檻</th>
 									<th>開始日期</th>
 									<th>結束日期</th>
+									<th>活動狀態</th>
 									<th>備註</th>
 									<th>操作</th>
 								</tr>
@@ -170,14 +172,30 @@ body .modal .modal-content form textarea {
 									<td th:text="${campaign.campaignTitle}"></td>
 									<td th:text="${campaign.campaignDescription}"></td>
 									<td th:text="${campaign.campaignType}"></td>
+									<td th:text="${campaign.minOrderAmount}"></td>
 									<td th:text="${campaign.startDate}"></td>
 									<td th:text="${campaign.endDate}"></td>
+									<td>
+									    <span th:with="now=${#temporals.createNow()}"
+									          th:style="${
+									            campaign.startDate.toLocalDateTime().isAfter(now) ? 'color: blue' :
+									            campaign.endDate.toLocalDateTime().isBefore(now) ? 'color: gray' :
+									            'color: green'
+									          }"
+									          th:text="${
+									            campaign.startDate.toLocalDateTime().isAfter(now) ? '未開始' :
+									            campaign.endDate.toLocalDateTime().isBefore(now) ? '已結束' :
+									            '進行中'
+									          }">
+									    </span>
+									</td>
 									<td th:text="${campaign.note}"></td>
 									<td>
 										<button type="button" id="edit" th:data-id="${campaign.id}"
 											th:data-title="${campaign.campaignTitle}"
 											th:data-description="${campaign.campaignDescription}"
 											th:data-type="${campaign.campaignType}"
+											th:data-min-order-amount="${campaign.minOrderAmount}"
 											th:data-start-date="${#dates.format(campaign.startDate, 'yyyy-MM-dd''T''HH:mm')}"
 											th:data-end-date="${#dates.format(campaign.endDate, 'yyyy-MM-dd''T''HH:mm')}"
 											th:data-note="${campaign.note}"
@@ -228,6 +246,12 @@ body .modal .modal-content form textarea {
 							<div class="question">
 								<span class="title">活動類別</span> <input type="text" id=""
 									name="campaignType" value="" placeholder="請輸入活動類別" required
+									aria-required="true" />
+							</div>
+							
+							<div class="question">
+								<span class="title">活動門檻</span> <input type="number" id=""
+									name="minOrderAmount" value="" placeholder="請輸入最小訂單金額" required
 									aria-required="true" />
 							</div>
 
@@ -290,6 +314,12 @@ body .modal .modal-content form textarea {
 								<span class="title">活動類別</span> <input type="text"
 									id="campaignType" name="campaignType" value=""
 									placeholder="請輸入活動類別" required aria-required="true" />
+							</div>
+							
+							<div class="question">
+								<span class="title">活動門檻</span> <input type="number" id="minOrderAmount"
+									name="minOrderAmount" value="" placeholder="請輸入最小訂單金額" required
+									aria-required="true" />
 							</div>
 
 							<div class="question">
@@ -365,6 +395,7 @@ body .modal .modal-content form textarea {
 			    document.getElementById("campaignTitle").value = button.dataset.title;
 			    document.getElementById("campaignDescription").value = button.dataset.description;
 			    document.getElementById("campaignType").value = button.dataset.type;
+			    document.getElementById("minOrderAmount").value = button.dataset.minOrderAmount;
 			    document.getElementById("campaignStartDate").value = button.dataset.startDate;
 			    document.getElementById("campaignEndDate").value = button.dataset.endDate;
 			    document.getElementById("note").value = button.dataset.note;
