@@ -186,36 +186,44 @@ body .modal .modal-content form textarea {
 										<td th:text="${reservations.id}"></td>
 										<td th:text="${reservations.formattedId}"></td>
 										<td th:text="${reservations.customerName}"></td>
-										<td th:text="${#strings.equals(reservations?.customerGender, '0') ? '男' : '女'}"></td>
-										
+										<td
+											th:text="${#strings.equals(reservations?.customerGender, '0') ? '男' : '女'}"></td>
+
 										<td th:text="${reservations.contactPhone}"></td>
-										<td th:text="${#dates.format(reservations.reservationDate, 'yyyy-MM-dd')}"></td>
-										<td th:text="${#dates.format(reservations.startTime,'HH:mm:ss')}"></td>
+										<td
+											th:text="${#dates.format(reservations.reservationDate, 'yyyy-MM-dd')}"></td>
+										<td
+											th:text="${#dates.format(reservations.startTime,'HH:mm')}"></td>
 										<td th:text="${reservations.numberPeople}"></td>
 										<td th:text="${reservations.notes}"></td>
 										<td th:text="${reservations.reservationStatus}"></td>
 										<td th:text="${reservations.createdAt}"></td>
+									
 
 										<td>
-										
+
 											<button type="button" id="edit"
-												th:onclick="openEditModal({
-												id: [[${reservations.id}]], 
-												
-											
-												
-        										customerName: [[${reservations.customerName}]], 
-        										customerGender:[[${reservations.customerGender}]],
-        										contactPhone: [[${reservations.contactPhone}]],
-        										reservationDate: [[${reservations.reservationDate}]],
-       											startTime: [[${reservations.startTime}]],
-       											numberPeople: [[${reservations.numberPeople}]],
-       											notes: [[${reservations.notes}]],   											
-       											reservationStatus: [[${reservations.reservationStatus}]]
-       										
-       										
-       											
-    										})">編輯</button>
+												th:data-id="${reservations.id}"
+												th:data-customer-name="${reservations.customerName}"
+												th:data-customer-gender="${reservations.customerGender}"
+												th:data-contact-phone="${reservations.contactPhone}"
+												th:data-reservation-date="${#dates.format(reservations.reservationDate,'yyyy-MM-dd')}"
+												th:data-start-time="${#dates.format(reservations.startTime, 'HH:mm')}"
+												th:data-number-people="${reservations.numberPeople}"
+												th:data-notes="${reservations.notes}"
+												th:data-reservation-status="${reservations.reservationStatus}"
+												onclick="openEditModal(this)">編輯</button>
+
+
+
+
+
+
+
+
+
+
+
 
 
 											<form
@@ -278,8 +286,8 @@ body .modal .modal-content form textarea {
 							</div>
 
 							<div class="question">
-								<label for="startTime" class="title">時間</label> <select
-									id="startTime" name="startTime" required aria-required="true">
+								<label for="startTime2 class="title">時間</label> <select
+									id="startTime2 name="startTime" required aria-required="true">
 									<option value="0" selected>選擇時間</option>
 									<option value="18:00">18:00</option>
 									<option value="20:00">20:00</option>
@@ -327,45 +335,46 @@ body .modal .modal-content form textarea {
 			<div class="modal-content">
 				<span class="close">&times;</span>
 				<h1>編輯訂位資訊</h1>
-				<form th:action="@{/Bistro/updatePost}" method="post" id="dataForm">
+				<form th:action="@{/Bistro/updatePost}"
+					enctype="multipart/form-data" method="post" id="dataForm">
 					<fieldset>
 						<!-- 區域1 -->
 						<legend>訂位資訊</legend>
 
-						<label for="id2"></label> <input type="hidden" name="id" id="id2"
-							readonly>
+						<input type="hidden" name="id" id="id" readonly>
 
 						<div class="question">
-							<label for="customerName2" class="title">姓名</label> <input
-								type="text" id="customerName2" name="customerName" value=""
+							<label for="customerName" class="title">姓名</label> <input
+								type="text" id="customerName" name="customerName" value=""
 								placeholder="請輸入姓名" required aria-required="true" />
 						</div>
 
 						<div class="question">
-							<label for="customerGender2" class="title">性別</label>
+							<label for="customerGender" class="title">性別</label>
 							<div>
-								<input type="radio" name="customerGender" value="0">男 <input
-									type="radio" name="customerGender" value="1">女
+								<input type="radio" class="gender" name="customerGender"
+									value="0">男 <input type="radio" class="gender"
+									name="customerGender" value="1">女
 							</div>
 						</div>
 
 						<div class="question">
-							<label for="contactPhone2" class="title">電話</label> <input
-								type="tel" id="contactPhone2" name="contactPhone" value=""
+							<label for="contactPhone" class="title">電話</label> <input
+								type="tel" id="contactPhone" name="contactPhone" value=""
 								placeholder="請輸入電話號碼" maxlength="10" required
 								aria-required="true" />
 						</div>
 
 
 						<div class="question">
-							<label for="reservationDate2" class="title">日期</label> <input
-								type="date" id="reservationDate2" name="reservationDate"
-								value="" required aria-required="true" />
+							<label for="reservationDate" class="title">日期</label> <input
+								type="date" id="reservationDate" name="reservationDate" value=""
+								required aria-required="true" />
 						</div>
 
 						<div class="question">
-							<label for="startTime2" class="title">時間</label> <select
-								id="startTime2" name="startTime" required aria-required="true">
+							<label for="startTime" class="title">時間</label> <select
+								id="startTime" name="startTime" required aria-required="true">
 								<option value="0" selected>選擇時間</option>
 								<option value="18:00">18:00</option>
 								<option value="20:00">20:00</option>
@@ -374,20 +383,20 @@ body .modal .modal-content form textarea {
 						</div>
 
 						<div class="question">
-							<label for="numberPeople2" class="title">訂位人數</label> <input
-								type="number" id="numberPeople2" name="numberPeople" value=""
+							<label for="numberPeople" class="title">訂位人數</label> <input
+								type="number" id="numberPeople" name="numberPeople" value=""
 								placeholder="入數" min="1" max="4" required aria-required="true" />
 						</div>
 
 						<div class="question">
-							<label for="reservationStatus2" class="title">狀態</label> <input
-								type="text" id="reservationStatus2" name="reservationStatus"
+							<label for="reservationStatus" class="title">狀態</label> <input
+								type="text" id="reservationStatus" name="reservationStatus"
 								value="" placeholder="已確認 未確認 已取消" required aria-required="true" />
 						</div>
 
 						<div class="question">
-							<label for="notes2" class="title">備註</label>
-							<textarea id="notes2" name="notes" placeholder="請輸入特殊需求"></textarea>
+							<label for="notes" class="title">備註</label>
+							<textarea id="notes" name="notes" placeholder="請輸入特殊需求"></textarea>
 						</div>
 
 
@@ -447,21 +456,31 @@ body .modal .modal-content form textarea {
         }
       };
       
-      function openEditModal(reservations) {
+      function openEditModal(button) {
     	document.getElementById("addEventModal2").style.display = "block";
-    	document.getElementById("id2").value =reservations.id;
-	   	document.getElementById("customerName2").value = reservations.customerName;
-	    document.getElementById("customerGender2").value = reservations.customerGender;
-	    document.getElementById("contactPhone2").value = reservations.contactPhone;
-	    document.getElementById("reservationDate2").value = reservations.reservationDate;
-	    document.getElementById("startTime2").value = reservations.startTime;    
-	    document.getElementById("numberPeople2").value = reservations.numberPeople;
-	    document.getElementById("notes2").value = reservations.notes;
-	    document.getElementById("reservationStatus2").value = reservations.reservationStatus;  
-	    
-	    
-	 
+    	
+    	document.getElementById("id").value =button.dataset.id;
+	   	document.getElementById("customerName").value = button.dataset.customerName;
+	    document.getElementById("contactPhone").value = button.dataset.contactPhone;
+	    document.getElementById("reservationDate").value =button.dataset.reservationDate;
 	   
+	    document.getElementById("numberPeople").value = button.dataset.numberPeople;
+	    document.getElementById("notes").value =button.dataset.notes;
+	    document.getElementById("reservationStatus").value =button.dataset.reservationStatus;  
+	    document.getElementById("startTime").value =button.dataset.startTime;
+	    let genderList = document.querySelectorAll(".gender");
+   		 genderList.forEach((radio) => {
+        // 如果当前 radio 的值与按钮的 dataset.customerGender 相同，就设置为选中
+        if (radio.value == button.dataset.customerGender) {
+            radio.checked = true;
+        } else {
+            radio.checked = false; // 取消其他 radio 的选中状态
+        }       
+    });
+	    
+	   
+	   
+											
 	}
 	
 	    
