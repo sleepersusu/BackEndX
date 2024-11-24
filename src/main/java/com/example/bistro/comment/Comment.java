@@ -74,13 +74,13 @@ public class Comment {
 
 	
 
-	public Members getMember() {
-		return member;
+	public Members getMembers() {
+		return members;
 	}
 
 
-	public void setMember(Members member) {
-		this.member = member;
+	public void setMembers(Members members) {
+		this.members = members;
 	}
 
 
