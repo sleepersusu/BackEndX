@@ -22,7 +22,7 @@ public class CommentService {
 	}
 
 	public List<Comment> findCommentByMemberId(Integer memberId) {
-		return commentRepo.findCommentByMember(memberId);
+		return commentRepo.findCommentByMembers(memberId);
 
 	}
 
@@ -51,9 +51,9 @@ public class CommentService {
 	}
 
 	@Transactional
-	public List<Comment> findCommentByMember(Integer memberId) {
+	public List<Comment> findCommentByMembers(Integer memberId) {
 
-		return commentRepo.findCommentByMember(memberId);
+		return commentRepo.findCommentByMembers(memberId);
 
 	}
 	@Transactional

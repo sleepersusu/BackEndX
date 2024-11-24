@@ -75,7 +75,7 @@ public class CommentController {
 		Menu menuById = menuService.findMenuById(menuSelect);
 		String commentProduct = menuById.getProductName();
 
-		newComment.setMember(newMember);
+		newComment.setMembers(newMember);
 		newComment.setMenu(newMenu);
 		newComment.setCommentProduct(commentProduct);
 		newComment.setCommentRating(commentRating);
@@ -94,7 +94,7 @@ public class CommentController {
 	@GetMapping("Bistro/findAllCommentByMember/{memberId}")
 	public String findAllCommentByMember(@PathVariable Integer memberId, Model model) {
 
-		List<Comment> comments = commentService.findCommentByMember(memberId);
+		List<Comment> comments = commentService.findCommentByMembers(memberId);
 		model.addAttribute("allComments", comments);
 		return "comment/showAllCommentByMemberView";
 	}
