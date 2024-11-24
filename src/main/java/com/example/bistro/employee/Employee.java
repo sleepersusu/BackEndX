@@ -1,5 +1,8 @@
 package com.example.bistro.employee;
 
+
+
+
 import com.example.bistro.jobTiltle.JobTitle;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -11,9 +14,15 @@ import java.util.Date;
 
 @Setter
 @Getter
+
 @Entity
 @Table(name = "Employee")
 public class Employee {
+
+
+	
+	
+	
 
     //PK
         @Id

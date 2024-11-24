@@ -392,10 +392,6 @@ text-align: left;
 
 /* form */
 
-fieldset{
-	padding: 0rem 1rem;
-}
-
 
 body .modal {
     display: none;
@@ -675,4 +671,3 @@ body .modal .modal-content form textarea {
 .out-of-stock{
 	color:red;
 }
-

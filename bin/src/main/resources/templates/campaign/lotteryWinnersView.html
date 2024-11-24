@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>抽獎機會管理 - DINEEASE餐廳管理系統</title>
+
+<link rel="icon" th:href="@{/images/favicon.ico}" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+	rel="stylesheet" />
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<link rel="stylesheet" th:href="@{/css/demo.css}" />
+<style th:inline="css">
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
+
+#edit, #delete {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+#dt-search-0 {
+	margin-right: 2rem
+}
+
+#dt-search-0:focus {
+	outline: none;
+}
+
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
+
+#addData:hover {
+	background-color: #2894FF;
+}
+
+.modal-content {
+	min-width: 400px;
+	overflow: auto;
+}
+
+body .modal .modal-content form textarea {
+	width: 350px
+}
+
+#save {
+	background-color: #0071e3;
+	border-radius: 10px;
+	color: white;
+	width: auto;
+	border: none;
+	font-size: 1rem;
+	padding: 0.4rem 2rem;
+}
+
+#save:hover {
+	background-color: #2894FF;
+}
+
+#reset {
+	border-radius: 10px;
+	background-color: white;
+	color: #0071e3;
+	border: 1px solid #0071e3;
+	height: auto;
+	width: auto;
+	font-size: 1rem;
+	padding: 0.3rem 2rem;
+}
+
+#reset:hover {
+	text-decoration: none;
+}
+
+#buttonbox {
+	margin-top: 0.5rem
+}
+</style>
+
+
+</head>
+
+<body>
+	<!-- DataTable Scripts -->
+	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
+	<div id="page">
+
+		<div th:replace="~{layout/navbar}"></div>
+		<div id="right">
+			<header>
+
+				<button id="logout">
+					<a href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i>
+						Log Out</a>
+				</button>
+			</header>
+
+			<main>
+				<h2>得獎者管理</h2>
+				<section id="workspace">
+					<div>
+						<button type="submit" class="dataButton" id="addData">
+							新增得獎者</button>
+					</div>
+				</section>
+
+
+
+				<section>
+					<div>
+						<table id="table" class="display">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>訂單編號</th>
+									<th>會員ID</th>
+									<th>會員姓名</th>
+									<th>活動名稱</th>
+									<th>獎品名稱</th>
+									<th>獲獎日期</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="event-list">
+								<tr th:each="result : ${allWinners}">
+									<td th:text="${result[0]}"></td>
+									<td th:text="${result[1]}"></td>
+									<td th:text="${result[2]}"></td>
+									<td th:text="${result[3]}"></td>
+									<td th:text="${result[4]}"></td>
+									<td th:text="${result[5]}"></td>
+									<td th:text="${result[6]}"></td>
+									<td>
+
+										<form th:action="@{/Bistro/campaign/winner/delete}"
+											method="post">
+											<input type="hidden" name="id" th:value="${result[0]}">
+											<button type="submit" id="delete"
+												onclick="return confirm('確定要刪除嗎？');">刪除</button>
+										</form>
+									</td>
+								</tr>
+								<tr th:if="${#lists.isEmpty(allWinners)}">
+									<td colspan="8">沒有抽獎資訊</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</main>
+
+
+			<div id="addEventModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>新增得獎者</h1>
+					<form th:action="@{/Bistro/campaign/winner/create}"
+						enctype="multipart/form-data" method="post" id="dataForm">
+						<fieldset>
+							<legend style="margin-bottom: 1rem; font-weight: bold">得獎者資訊</legend>							
+
+							<div class="question">
+							    <span class="title">選擇獎品</span>
+							    <select name="prizeId" id="prizeSelect" required>
+							        <option value="">請選擇獎品</option>
+							        <option 
+							            th:each="prize : ${allCampaignPrizes}" 
+							            th:value="${prize.id}" 
+							            th:data-campaign-id="${prize.campaign.id}" 
+							            th:data-campaign-title="${prize.campaign.campaignTitle}" 
+							            th:text="${prize.prizeName}">
+							        </option>
+							    </select>
+							</div>
+							
+							<div class="question">
+							    <span class="title">活動名稱</span>
+							    <input type="text" id="campaignInput" name="campaignName" readonly placeholder="請先選擇獎品">
+							    <input type="hidden" id="campaignIdInput" name="campaignId"> 
+							</div>
+
+							<div class="question">
+								<span class="title">得獎訂單</span> <select name="chanceId" required>
+									<option value="">請選擇得獎訂單</option>
+									<option th:each="chance : ${allChance}" th:value="${chance.id}"
+										th:text="${chance.orders.ID}"></option>
+								</select>
+							</div>
+						</fieldset>
+
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton">儲存</button>
+							<button type="reset" id="reset" class="formbutton">重設</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<footer> &copy; Made by TeamWork </footer>
+		</div>
+	</div>
+
+
+
+	<script>
+		$("#table").DataTable({
+			scrollX : "90%",
+			scrollY : "500px",
+			
+		})		
+		
+		
+		// jquery寫法 end
+		
+		document.getElementById("addData").addEventListener("click", () => {
+        	document.getElementById("addEventModal").style.display = "block";
+     	 });
+
+		document.querySelectorAll(".close").forEach(closeButton => {
+		    closeButton.addEventListener("click", () => {
+		        document.getElementById("addEventModal").style.display = "none";
+		        document.getElementById("addEventModal2").style.display = "none";
+		    });
+		});
+
+	      window.onclick = function (event) {
+	        const modal = document.getElementById("addEventModal");
+	        const modal2 = document.getElementById("addEventModal2");
+	        if (event.target == modal || event.target == modal2) {
+	          document.getElementById("addEventModal").style.display = "none";
+	          document.getElementById("addEventModal2").style.display = "none";
+	        }
+	      };    
+	      
+	      document.getElementById('prizeSelect').addEventListener('change', function () {
+		    const selectedPrize = this.options[this.selectedIndex]; 
+		    const campaignInput = document.getElementById('campaignInput'); 
+		    const campaignIdInput = document.getElementById('campaignIdInput'); 
+		
+		    const campaignTitle = selectedPrize.dataset.campaignTitle || ''; 
+		    const campaignId = selectedPrize.dataset.campaignId || ''; 
+		
+		    if (campaignTitle) {
+		        campaignInput.value = campaignTitle; 
+		        campaignIdInput.value = campaignId; 
+		    } else {
+		        campaignInput.value = ''; 
+		        campaignIdInput.value = ''; 
+		    }
+		});
+			      
+	      
+      
+	</script>
+</body>
+</html>
