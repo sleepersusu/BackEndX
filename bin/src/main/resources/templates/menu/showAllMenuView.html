@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title>商品管理 - DINEEASE餐廳管理系統</title>
+<link rel="icon" th:href="@{/images/favicon.ico}" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+	rel="stylesheet" />
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+
+<link rel="stylesheet" th:href="@{/css/demo.css}" />
+
+</head>
+<body>
+
+	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
+	<div id="page">
+
+		<div th:replace="~{layout/navbar.html}"></div>
+
+
+
+		<div id="right">
+			<header>
+
+				<button id="logout">
+					<i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+				</button>
+
+
+
+			</header>
+
+
+
+			<main>
+				<h2>商品管理</h2>
+				<section id="workspace">
+					<div>
+						<button type="submit" class="dataButton" id="addData">
+							新增商品</button>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<table id="table" class="display ">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th width="100px">名稱</th>
+									<th>照片</th>
+									<th>價格</th>
+									<th>分類</th>
+									<th width="300px">描述</th>
+									<th>庫存數量</th>
+									<th>最低庫存量</th>
+									<th>星數</th>
+									<th>狀態</th>
+									<th>建立日期</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+
+							<tbody>
+
+
+
+
+								<th:block th:each="menu:${allMenu}">
+
+									<tr th:if="${#lists.isEmpty(allMenu)}">
+										<td colspan="12">沒有資料</td>
+									</tr>
+
+									<tr class="fade-out"
+										th:classappend="${menu.menuStatus == '已下架'} ? 'out-of-stock' : ''">
+
+										<td th:text="${menu.ID}"></td>
+										<td th:text="${menu.productName}" width="100px"></td>
+										<td><img th:src="@{/Bistro/download(ID=${menu.ID})}"
+											alt="商品照片" width="100"></td>
+										<td th:text="${menu.productPrice}"></td>
+										<td th:text="${menu.productCategory}"></td>
+										<td th:text="${menu.productDescribe}" width="300px"></td>
+										<td th:text="${menu.productCount}"></td>
+										<td th:text="${menu.minproductCount}"></td>
+
+										<td th:text="${menu.avgScore}"></td>
+
+										<td th:text="${menu.menuStatus}"></td>
+										<td th:text="${{menu.createdAt}}"></td>
+
+
+
+										<td>
+											<button type="button" id="edit"
+												th:onclick="openEditModal({
+        										ID: [[${menu.ID}]], 
+        										productCategory: [[${menu.productCategory}]], 
+        										productImage:[[${menu.productImg}]],
+        										productName: [[${menu.productName}]],
+        										productPrice: [[${menu.productPrice}]],
+       											productDescribe: [[${menu.productDescribe}]],
+       											productImgUrl: [[${menu.productImgUrl}]],
+       											productCount: [[${menu.productCount}]],
+       											minproductCount: [[${menu.minproductCount}]],
+       											menuStatus: [[${menu.menuStatus}]],
+       											createdAt: [[${{menu.createdAt}}]],
+												
+    										})">編輯</button>
+
+
+											<form th:if="${menu.menuStatus!='已下架'}"
+												th:action="@{/Bistro/deleteMenu(ID=${menu.ID})}"
+												method="post" style="display: inline;">
+												<input type="hidden" name="ID" th:value="${menu.ID}">
+												<button type="submit" id="delete"
+													onclick="return confirm('確定要下架嗎？');">下架</button>
+											</form>
+
+											<form th:if="${menu.menuStatus!='上架'}"
+												th:action="@{/Bistro/recoverMenu(ID=${menu.ID})}"
+												method="post" style="display: inline;">
+												<input type="hidden" name="ID" th:value="${menu.ID}">
+												<button type="submit" id="recover"
+													onclick="return confirm('確定要上架嗎？');">上架</button>
+											</form>
+
+
+
+
+										</td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</main>
+
+
+			<th:block>
+				<div id="lowStockModal" class="modal"
+					th:if="${lowStockItems != null and lowStockItems.size() > 0}">
+					<div class="modal-content">
+
+						<span class="close">&times;</span>
+						<h2>庫存不足的商品</h2>
+						<ul id="lowStockList" th:each="lowStockItem : ${lowStockItems}">
+							<li th:text="${lowStockItem}"></li>
+						</ul>
+					</div>
+				</div>
+			</th:block>
+
+
+
+
+
+
+
+
+			<!-- -------------------------跳出表單 新增商品------------------------ -->
+			<div id="addEventModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>新增商品資料</h1>
+					<form th:action="@{/Bistro/postMenu}" method="post"
+						enctype="multipart/form-data" id="dataForm">
+						<fieldset>
+							<!-- 區域1 -->
+
+							<legend>商品資訊</legend>
+
+							<div class="question">
+								<label for="productCategory" class="title">商品分類</label> <select
+									id="productCategory" name="productCategory" required
+									aria-required="true">
+									<option value="0" selected>選擇商品分類</option>
+									<option value="主菜">主菜</option>
+									<option value="開胃菜">沙拉</option>
+									<option value="飲品">飲料</option>
+									<option value="甜點">甜點</option>
+								</select>
+							</div>
+
+							<div class="question">
+								<label for="productName" class="title">商品名稱</label> <input
+									type="text" id="productName" name="productName" value=""
+									placeholder="請輸入商品名稱" required aria-required="true" />
+							</div>
+
+							<div class="question">
+								<label for="productImage" class="title">商品照片</label> <input
+									type="file" id="productImage" name="productImage" required
+									aria-required="true" accept="image/*"
+									onchange="previewImage(event)" />
+							</div>
+
+							<div id="previewContainer" style="display: none">
+								<img id="preview" alt="商品照片" width="200" class="question">
+							</div>
+
+							<div class="question">
+								<label for="productPrice" class="title">商品單價</label> <input
+									type="number" id="productPrice" name="productPrice" value=""
+									placeholder="請輸入商品單價" required aria-required="true" min="0" />
+							</div>
+
+							<div class="question">
+								<label for="productDescribe" class="title">商品製作</label>
+								<textarea name="productDescribe" placeholder="請輸入商品如何製作"
+									required aria-required="true" id="productDescribe"></textarea>
+							</div>
+
+
+							<div class="question">
+								<label for="productCount" class="title">商品庫存</label> <input
+									type="number" id="productCount" name="productCount" value=""
+									placeholder="請輸入庫存數量" required aria-required="true" min="0" />
+							</div>
+
+							<div class="question">
+								<label for="minproductCount" class="title">最低庫存量</label> <input
+									type="number" id="minproductCount" name="minproductCount"
+									value="" placeholder="請輸入最低庫存量" required aria-required="true"
+									min="0" />
+							</div>
+
+							<div class="question">
+								<label for="avgScore" class="title"></label> <input
+									type="hidden" id="avgScore" name="avgScore" value=""
+									placeholder="請輸入星數" required aria-required="true" min="0"
+									step="0.1" />
+							</div>
+
+
+							<div class="question">
+								<label for="menuStatus" class="title">狀態</label> <select
+									id="menuStatus" name="menuStatus" required aria-required="true">
+									<option value="0">選擇商品狀態</option>
+									<option value="上架" selected>上架</option>
+									<option value="已下架">已下架</option>
+
+								</select>
+							</div>
+
+
+
+						</fieldset>
+						<!-- 區域1 -->
+
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton">儲存</button>
+							<button type="reset" id="reset" class="formbutton"
+								onclick="resetPreview()">重設</button>
+						</div>
+
+					</form>
+				</div>
+				<!-- modal-content -->
+
+			</div>
+			<!-- addEventModal 跳出表單 -->
+
+			<!-- -------------------------跳出表單 新增商品------------------------ -->
+
+
+			<!-- -------------------------跳出表單 編輯商品------------------------ -->
+
+			<div id="addEventModal2" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>編輯商品資料</h1>
+					<form th:action="@{/Bistro/updateMenuPost}" method="post"
+						enctype="multipart/form-data" id="dataForm">
+						<fieldset>
+							<!-- 區域1 -->
+							<legend>商品資訊</legend>
+
+							<label for="menuId2"></label> <input type="hidden" name="ID"
+								id="menuId2" readonly>
+							<div class="question">
+								<label for="productCategory2" class="title">商品分類</label> <select
+									id="productCategory2" name="productCategory" required
+									aria-required="true">
+									<option value="0" selected>選擇商品分類</option>
+									<option value="主菜">主菜</option>
+									<option value="開胃菜">沙拉</option>
+									<option value="飲品">飲料</option>
+									<option value="甜點">甜點</option>
+								</select>
+							</div>
+
+
+
+							<div class="question">
+								<label for="productName2" class="title">商品名稱</label> <input
+									type="text" id="productName2" name="productName" value=""
+									placeholder="請輸入商品名稱" required aria-required="true" />
+							</div>
+
+							<div class="question">
+								<label for="productImage2" class="title">商品照片</label> <input
+									type="file" id="productImage2" name="productImage"
+									accept="image/*" onchange="previewImage(event)">
+							</div>
+
+
+
+							<div id="previewContainer2">
+								<img id="preview2" alt="商品照片" width="200" src="" />
+							</div>
+
+
+							<div class="question">
+								<label for="productPrice2" class="title">商品單價</label> <input
+									type="number" id="productPrice2" name="productPrice" value=""
+									placeholder="請輸入商品單價" required aria-required="true" />
+							</div>
+
+							<div class="question">
+								<label for="productDescribe2" class="title">商品製作</label>
+								<textarea name="productDescribe" placeholder="請輸入商品如何製作"
+									required aria-required="true" id="productDescribe2"></textarea>
+							</div>
+
+							<div class="question">
+								<label for="productCount2" class="title">商品庫存</label> <input
+									type="number" id="productCount2" name="productCount" value=""
+									placeholder="請輸入庫存數量" required aria-required="true" min="0" />
+							</div>
+
+
+							<div class="question">
+								<label for="minproductCount2" class="title">最低庫存量</label> <input
+									type="number" id="minproductCount2" name="minproductCount"
+									value="" placeholder="請輸入最低庫存量" required aria-required="true"
+									min="0" />
+							</div>
+
+
+
+							<div class="question">
+								<label for="menuStatus2" class="title">狀態</label> <select
+									id="menuStatus2" name="menuStatus" required
+									aria-required="true">
+									<option value="0" selected>選擇商品狀態</option>
+									<option value="上架">上架</option>
+									<option value="已下架">已下架</option>
+
+								</select>
+							</div>
+
+
+							<div class="question">
+								<label for="createdAt2" class="title">建立時間</label> <input
+									type="date" name="createdAt" id="createdAt2" value="" required>
+							</div>
+
+						</fieldset>
+						<!-- 區域1 -->
+
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton">儲存</button>
+							<button type="reset" id="reset" class="formbutton"
+								onclick="resetPreview()">重設</button>
+						</div>
+					</form>
+				</div>
+				<!-- modal-content -->
+			</div>
+			<!-- addEventModal 跳出表單 -->
+
+			<!-- -------------------------跳出表單 編輯商品------------------------ -->
+
+
+
+			<footer> &copy; Made by TeamWork </footer>
+		</div>
+	</div>
+
+
+
+	<script>
+		
+
+	$("#table").DataTable({
+		scrollX : "90%",
+		scrollY : "500px",
+	})
+
+	
+	document.getElementById("addData").addEventListener("click", () => {
+    	document.getElementById("addEventModal").style.display = "block";
+ 	 });
+
+	document.querySelectorAll(".close").forEach(closeButton => {
+	    closeButton.addEventListener("click", () => {
+	        document.getElementById("addEventModal").style.display = "none";
+	        document.getElementById("addEventModal2").style.display = "none";
+	        document.getElementById("lowStockModal").style.display= "none";
+	         
+	    });
+	});
+
+      window.onclick = function (event) {
+        const modal = document.getElementById("addEventModal");
+        const modal2 = document.getElementById("addEventModal2");
+        let lowStockModal = document.getElementById("lowStockModal");
+        if (event.target == modal || event.target == modal2) {
+          document.getElementById("addEventModal").style.display = "none";
+          document.getElementById("addEventModal2").style.display = "none";
+          document.getElementById("lowStockModal").style.display = "none";
+        }
+      };
+      
+      function openEditModal(menu) {
+    	document.getElementById("addEventModal2").style.display = "block";
+    	document.getElementById("menuId2").value =menu.ID;
+	   	document.getElementById("productCategory2").value = menu.productCategory;
+	    document.getElementById("productName2").value = menu.productName;
+	    document.getElementById("productPrice2").value = menu.productPrice;
+	    document.getElementById("productDescribe2").value = menu.productDescribe;
+	    document.getElementById("productCount2").value = menu.productCount;
+	    document.getElementById("minproductCount2").value = menu.minproductCount;
+	    document.getElementById("menuStatus2").value = menu.menuStatus;
+	    document.getElementById("createdAt2").value = menu.createdAt;
+
+		   loadImage(menu.ID, 'preview2');
+	    }
+	    
+	    
+	    //換照片時即時顯示
+	    function previewImage(event) {
+        let preview = document.getElementById('preview');
+        let previewContainer = document.getElementById('previewContainer');
+        
+        let preview2 = document.getElementById('preview2');
+        let previewContainer2 = document.getElementById('previewContainer2');
+        
+        previewContainer.style.display="block";
+        previewContainer2.style.display="block";
+         
+        preview.src = URL.createObjectURL(event.target.files[0]);
+        preview2.src = URL.createObjectURL(event.target.files[0]);
+        
+        preview.onload = function() {
+            URL.revokeObjectURL(preview.src); 
+        }
+         preview2.onload = function() {
+            URL.revokeObjectURL(preview2.src); 
+        }
+    }
+      	
+      	function resetPreview() {
+        let preview = document.getElementById('preview');
+        let preview2 = document.getElementById('preview2');
+        preview.src = ''; // 清除圖片預覽
+        preview2.src = ''; // 清除圖片預覽
+    }
+	   
+
+
+function loadImage(productId, previewId) {
+    const imageUrl = `/Bistro/download?ID=${productId}`;
+    const preview = document.getElementById(previewId);
+    preview.src = imageUrl;
+    preview.style.display = "block";
+
+}
+
+        // 顯示庫存不足模態框
+        document.getElementById("lowStockModal").style.display = "block";
+
+	</script>
+
+
+
+
+
+</body>
+</html>

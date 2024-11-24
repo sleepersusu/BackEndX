@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -16,7 +16,7 @@ public class CommentService {
 	public Comment createComment(Comment comment) {
 		return commentRepo.save(comment);
 	}
-	
+
 	public List<Comment> findAllComment() {
 		return commentRepo.findAll();
 	}
@@ -25,38 +25,41 @@ public class CommentService {
 		return commentRepo.findCommentByMember(memberId);
 
 	}
-	
-	
-	public List<Comment> findCommentByMenuId(Integer menuId) {
-		return commentRepo.findCommentByMenuId(menuId);
 
-	}
-	
-	
 	public Comment findCommentById(Integer id) {
 		Optional<Comment> op = commentRepo.findById(id);
-		
-		if(op.isPresent()) {
+
+		if (op.isPresent()) {
 			return op.get();
 		}
-		return null;		
+		return null;
 	}
-	
-	
-	public void deleteComment(Integer id) {
+
+	public boolean deleteComment(Integer id) {
 		Optional<Comment> op = commentRepo.findById(id);
-		if(op.isPresent()) {
+		if (op.isPresent()) {
 			Comment comment = op.get();
 			commentRepo.delete(comment);
+			return true;
 		}
-		return;
+		return false;
+		
 	}
-	
-	
+
 	public Comment updateComment(Comment comment) {
 		return commentRepo.save(comment);
 	}
-	
-	
-	
+
+	@Transactional
+	public List<Comment> findCommentByMember(Integer memberId) {
+
+		return commentRepo.findCommentByMember(memberId);
+
+	}
+	@Transactional
+	public List<Comment> findCommentByMenuId(Integer menuId) {
+
+		return commentRepo.findCommentByMenuId(menuId);
+
+	}
 }

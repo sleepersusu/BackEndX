@@ -1,12 +1,10 @@
 package com.example.bistro.menu;
 
-
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class MenuService {
@@ -37,22 +35,20 @@ public class MenuService {
 			Menu menu = op.get();
 			menu.setMenuStatus("已下架");
 			menuRepo.save(menu);
-			 return;
+			return;
 		}
 	}
-	
-	
-	
-	public void recoverMenu(Integer  id) {
+
+	public void recoverMenu(Integer id) {
 		Optional<Menu> op = menuRepo.findById(id);
 		if (op.isPresent()) {
 
 			Menu menu = op.get();
 			menu.setMenuStatus("上架");
 			menuRepo.save(menu);
-			 return;
+			return;
 		}
-		
+
 	}
 
 	public Menu updateMenu(Menu menu) {
@@ -70,25 +66,28 @@ public class MenuService {
 
 	}
 
-
 	public Menu findMenuByProductName(String productName) {
 		Menu findMenuByProductName = menuRepo.findByProductName(productName);
 		return findMenuByProductName;
 	}
 
-	
-	
+	// 查詢所有菜品的平均分數
+	public List<Object[]> countAvgScores() {
+		return menuRepo.countAvgScores();
+	}
 
-	 // 查詢所有菜品的平均分數
-    public List<Object[]> countAvgScores() {
-        return menuRepo.countAvgScores();
-    }
+	// 上架商品
+	public List<Menu> findMenuByStatusIsSold() {
+		return menuRepo.findMenuByStatusIsSold();
+	}
 
-    //上架商品
-    public List<Menu> findMenuByStatusIsSold() {
-        return menuRepo.findMenuByStatusIsSold();
-    }
-    
-    
+	public List<String> findAllCategories() {
+		return menuRepo.findAllCategories();
+	}
+
+	public List<Menu> findMenusByCategory(String category) {
+		return menuRepo.findMenusByCategory(category);
+	}
+
 	
 }

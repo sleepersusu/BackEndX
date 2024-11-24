@@ -1,6 +1,7 @@
 package com.example.bistro.menu;
 
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,6 @@ import com.example.bistro.comment.Comment;
 import com.example.bistro.orderDetails.OrderDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -62,6 +62,12 @@ public class Menu {
 	@JsonIgnore
 	@OneToMany(mappedBy = "menu", fetch = FetchType.LAZY)
 	private List<Comment> comments = new ArrayList<Comment>(); // 用於映射 Comment 實體中的 menu
+	
+	
+	
+
+	
+	
 
 	@PrePersist // 當物件要轉換成 Persistent 狀態以前，執行這個方法
 	public void createdAt() {

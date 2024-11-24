@@ -46,12 +46,7 @@
 
 			<main>
 				<h2>評論管理</h2>
-				<section id="workspace">
-					<div>
-						<button type="submit" class="dataButton" id="addData">
-							新增評論</button>
-					</div>
-				</section>
+				
 
 				<section>
 					<div>
@@ -64,7 +59,7 @@
 									<th>評論分數</th>
 									<th>評論留言</th>
 									<th>評論時間</th>
-									<th>操作</th>
+									
 								</tr>
 							</thead>
 
@@ -73,44 +68,18 @@
 								<th:block th:each="comment:${allComments}">
 
 									<tr th:if="${#lists.isEmpty(allComments)}">
-										<td colspan="7">沒有資料</td>
+										<td colspan="6">沒有資料</td>
 									</tr>
 
-									<tr class="fade-out">
+									<tr>
 
 										<td th:text="${comment.ID}"></td>
 										<td th:text="${comment.member.memberName}"></td>
-										<td th:text="${comment.menu.ID}"></td>
-										<td th:text="${comment.productName}"></td>
+										<td th:text="${comment.commentProduct}"></td>
+										<td th:text="${comment. commentRating}"></td>
 										<td th:text="${comment.commentMessage}"></td>
-										<td th:text="${comment.commentTime}"></td>
-										<td>
-											<button type="button" id="edit"
-												th:onclick="openEditModal({
-        										ID: [[${menu.ID}]], 
-        										productCategory: [[${menu.productCategory}]], 
-        										productImage:[[${menu.productImg}]],
-        										productName: [[${menu.productName}]],
-        										productPrice: [[${menu.productPrice}]],
-       											productDescribe: [[${menu.productDescribe}]],
-       											productImgUrl: [[${menu.productImgUrl}]],
-       											productCount: [[${menu.productCount}]],
-       											minproductCount: [[${menu.minproductCount}]],
-       											menuStatus: [[${menu.menuStatus}]],
-       											createdAt: [[${{menu.createdAt}}]],
-												
-    										})">編輯</button>
-
-
-											<form th:if="${menu.menuStatus!='已下架'}"
-												th:action="@{/Bistro/deleteMenu(ID=${menu.ID})}"
-												method="post" style="display: inline;">
-												<input type="hidden" name="ID" th:value="${menu.ID}">
-												<button type="submit" id="delete"
-													onclick="return confirm('確定要下架嗎？');">下架</button>
-											</form>
-
-										</td>
+										<td th:text="${{comment.commentTime}}"></td>
+										
 									</tr>
 								</th:block>
 							</tbody>
@@ -139,44 +108,7 @@
 	})
 
 	
-	document.getElementById("addData").addEventListener("click", () => {
-    	document.getElementById("addEventModal").style.display = "block";
- 	 });
 
-	document.querySelectorAll(".close").forEach(closeButton => {
-	    closeButton.addEventListener("click", () => {
-	        document.getElementById("addEventModal").style.display = "none";
-	        document.getElementById("addEventModal2").style.display = "none";
-	        document.getElementById("lowStockModal").style.display= "none";
-	         
-	    });
-	});
-
-      window.onclick = function (event) {
-        const modal = document.getElementById("addEventModal");
-        const modal2 = document.getElementById("addEventModal2");
-        let lowStockModal = document.getElementById("lowStockModal");
-        if (event.target == modal || event.target == modal2) {
-          document.getElementById("addEventModal").style.display = "none";
-          document.getElementById("addEventModal2").style.display = "none";
-          document.getElementById("lowStockModal").style.display = "none";
-        }
-      };
-      
-      function openEditModal(menu) {
-    	document.getElementById("addEventModal2").style.display = "block";
-    	document.getElementById("menuId2").value =menu.ID;
-	   	document.getElementById("productCategory2").value = menu.productCategory;
-	    document.getElementById("productName2").value = menu.productName;
-	    document.getElementById("productPrice2").value = menu.productPrice;
-	    document.getElementById("productDescribe2").value = menu.productDescribe;
-	    document.getElementById("productCount2").value = menu.productCount;
-	    document.getElementById("minproductCount2").value = menu.minproductCount;
-	    document.getElementById("menuStatus2").value = menu.menuStatus;
-	    document.getElementById("createdAt2").value = menu.createdAt;
-
-		   loadImage(menu.ID, 'preview2');
-	    }
 	    
 	    
 

@@ -1,6 +1,5 @@
 package com.example.bistro.menu;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,11 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-
 
 @Controller
 public class MenuController {
@@ -31,14 +31,14 @@ public class MenuController {
 
 	@Autowired
 	private MenuRepository menuRepo;
+	
 
 	@PostMapping("/Bistro/postMenu")
 	public String postMenu(@RequestParam String productCategory, @RequestParam String productName,
 			@RequestParam MultipartFile productImage, @RequestParam Integer productPrice,
 			@RequestParam String productDescribe, @RequestParam Integer productCount,
-			@RequestParam Integer minproductCount,
-			@RequestParam(defaultValue = "0.0") Double avgScore, @RequestParam String menuStatus)
-			throws IOException {
+			@RequestParam Integer minproductCount, @RequestParam(defaultValue = "0.0") Double avgScore,
+			@RequestParam String menuStatus) throws IOException {
 
 		byte[] fileBytes = productImage.getBytes();
 		String originalFilename = productImage.getOriginalFilename();
@@ -100,58 +100,53 @@ public class MenuController {
 	@GetMapping("/Bistro/findAllMenu")
 	public String findAllMenu(Model model) {
 
-		 // 查詢所有菜單
-	    List<Menu> menuList = menuService.findAllMenu();
-	    
-	     List<String> lowStockItems = new ArrayList<>();
+		// 查詢所有菜單
+		List<Menu> menuList = menuService.findAllMenu();
 
-	    // 只檢查上架庫存是否不足 已下架庫存不理他
-	    for (Menu menu : menuList) {
-	        if ((menu.getProductCount() <= menu.getMinproductCount())&&menu.getMenuStatus().equals("上架")) {
-	            lowStockItems.add(menu.getProductName());
-	        }
-	    }
-	    
-	      // 將庫存不足的商品名稱傳遞給前端
-	    model.addAttribute("lowStockItems", lowStockItems);
-	    
-	    
-	    // 查詢所有菜品的平均分數
-	    List<Object[]> avgScores = menuService.countAvgScores();
-	    
-	   
+		List<String> lowStockItems = new ArrayList<>();
 
-	  
-	    
-	    // 創建一個 Map 用來存儲菜品名稱和平均分數
-	    Map<String, Double> avgScoreMap = new HashMap<>();
-	    for (Object[] avgScore : avgScores) {
-	        String productName = (String) avgScore[0];  // 取得菜品名稱
-	        Double score = (Double) avgScore[1];        // 取得平均分數
-	        avgScoreMap.put(productName, score);
-	    }
-	    
-	    // 為每個菜品設置平均分數
-	    for (Menu menu : menuList) {
-	        Double avgScore = avgScoreMap.get(menu.getProductName());
-	        if (avgScore != null) {
-	        	double roundedAvgScore = Math.round(avgScore * 10.0) / 10.0;
-	        	menu.setAvgScore(roundedAvgScore);//設置平均分數
-	            
-	        } else {
-	            menu.setAvgScore(0.0); // 如果沒有評論則設置為 0
-	        }
-	        
-	    }
-	    
-	    menuRepo.saveAll(menuList);
+		// 只檢查上架庫存是否不足 已下架庫存不理他
+		for (Menu menu : menuList) {
+			if ((menu.getProductCount() < menu.getMinproductCount()) && menu.getMenuStatus().equals("上架")) {
+				lowStockItems.add(menu.getProductName());
+			}
+		}
 
-	    // 將菜單列表添加到模型
-	    model.addAttribute("allMenu", menuList);
-	    model.addAttribute("lowStockItems", lowStockItems); 
-	    model.addAttribute("menuList", menuList);
+		// 將庫存不足的商品名稱傳遞給前端
+		model.addAttribute("lowStockItems", lowStockItems);
 
-	    return "menu/showAllMenuView";
+		// 查詢所有菜品的平均分數
+		List<Object[]> avgScores = menuService.countAvgScores();
+
+		// 創建一個 Map 用來存儲菜品名稱和平均分數
+		Map<String, Double> avgScoreMap = new HashMap<>();
+		for (Object[] avgScore : avgScores) {
+			String productName = (String) avgScore[0]; // 取得菜品名稱
+			Double score = (Double) avgScore[1]; // 取得平均分數
+			avgScoreMap.put(productName, score);
+		}
+
+		// 為每個菜品設置平均分數
+		for (Menu menu : menuList) {
+			Double avgScore = avgScoreMap.get(menu.getProductName());
+			if (avgScore != null) {
+				double roundedAvgScore = Math.round(avgScore * 10.0) / 10.0;
+				menu.setAvgScore(roundedAvgScore);// 設置平均分數
+
+			} else {
+				menu.setAvgScore(0.0); // 如果沒有評論則設置為 0
+			}
+
+		}
+
+		menuRepo.saveAll(menuList);
+
+
+		model.addAttribute("allMenu", menuList);
+		model.addAttribute("lowStockItems", lowStockItems);
+		model.addAttribute("menuList", menuList);
+
+		return "menu/showAllMenuView";
 	}
 
 	@GetMapping("/Menu/updateMenu")
@@ -170,7 +165,8 @@ public class MenuController {
 
 	}
 
-	@PostMapping("/Bistro/updateMenuPost")@Transactional
+	@PostMapping("/Bistro/updateMenuPost")
+	@Transactional
 	public String updateMenuPost(@ModelAttribute Menu menu, @RequestParam("productImage") MultipartFile file,
 			Model model) {
 
@@ -192,9 +188,8 @@ public class MenuController {
 			}
 
 			Menu updateMenu = menuService.updateMenu(menu);
-			
+
 			model.addAttribute("updateMenu", updateMenu);
-			
 
 			return "redirect:/Bistro/findAllMenu";
 
@@ -207,7 +202,7 @@ public class MenuController {
 
 	}
 
-	@PostMapping("/Bistro/deleteMenu")  //下架商品
+	@PostMapping("/Bistro/deleteMenu") // 下架商品
 	public String deleteMenu(@RequestParam Integer ID) {
 
 		menuService.deleteMenu(ID);
@@ -215,8 +210,8 @@ public class MenuController {
 		return "redirect:/Bistro/findAllMenu";
 
 	}
-	
-	@PostMapping("/Bistro/recoverMenu") //下架商品恢復成上架
+
+	@PostMapping("/Bistro/recoverMenu") // 下架商品恢復成上架
 	public String recoverMenu(@RequestParam Integer ID) {
 
 		menuService.recoverMenu(ID);
@@ -224,25 +219,14 @@ public class MenuController {
 		return "redirect:/Bistro/findAllMenu";
 
 	}
-	
-	
-	@GetMapping //只找出上架中產品
-	public String findMenuByStatusIsSold(Model model) {
 
-		List<Menu> menuByStatusIsSold = menuService.findMenuByStatusIsSold();
-		
-		
-		
-		
-		menuRepo.saveAll(menuByStatusIsSold);
-		model.addAttribute("menuIsSold", menuByStatusIsSold);
-		return "redirect:/Bistro/findAllMenu";
-
+	@GetMapping("/Bistro/findMenuIsSold")
+	@ResponseBody
+	public ResponseEntity<List<Menu>> findMenuByStatusIsSold() {
+		List<Menu> menuIsSold = menuService.findMenuByStatusIsSold();
+		return ResponseEntity.ok(menuIsSold);
 	}
-	
-	
-	
-	
+
 	
 
 }
