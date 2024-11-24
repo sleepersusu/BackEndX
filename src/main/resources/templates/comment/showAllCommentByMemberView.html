@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/">
 <head>
-<meta charset="UTF-8" />
-<title>會員專區</title>
+<meta charset="UTF-8">
+<title>商品管理 - DINEEASE餐廳管理系統</title>
 <link rel="icon" th:href="@{/images/favicon.ico}" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,21 +24,45 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-	crossorigin="anonymous">
+	crossorigin="anonymous" />
 
+
+<style>
+.delete {
+	background-color: #CE0000;
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+.delete:hover {
+	background-color: #FF5151;
+}
+</style>
 </head>
+
+
+
+
 <body>
 	<h2>模擬前端</h2>
 
 	<h4>列出會員所有評論</h4>
+
+
+	<div>
+		<button type="submit" class="dataButton" id="addData">新增商品</button>
+	</div>
+
+
 	<div class="container">
 		<div class="row justify-content-center">
-
-
 			<table class="table">
 				<thead>
 					<tr>
-
+						<th scope="col">餐點</th>
 						<th scope="col">餐點</th>
 						<th scope="col">評論分數</th>
 						<th scope="col">你的評論</th>
@@ -47,90 +71,221 @@
 					</tr>
 				</thead>
 				<tbody>
-
-
-
 					<tr th:if="${#lists.isEmpty(allComments)}">
 						<td colspan="5">沒有資料</td>
 					</tr>
 
 					<tr th:each="comment : ${allComments}" class="fade-out">
-
 						<td th:text="${comment.commentProduct}"></td>
+						<td th:text="${comment.menu.productCategory}"></td>
 						<td th:text="${comment. commentRating}"></td>
 						<td th:text="${comment.commentMessage}"></td>
 						<td th:text="${{comment.commentTime}}"></td>
 						<td>
+							<button type="button" id="edit"
+								th:onclick="openEditModal({
+        										ID: [[${comment.ID}]], 
+        										
+       											memberId: [[${comment.member.ID}]],
+       											
+       											categorySelect:[[${comment.menu.productCategory}]],
+       											commentProduct: [[${comment.commentProduct}]],
+       											commentRating: [[${comment.commentRating}]],
+       											commentMessage: [[${comment.commentMessage}]],
+       											commentTime: [[${{comment.commentTime}}]],												
+    										})">編輯</button>
 
-							<button id="delete">刪除</button>
+							<form th:action="@{/Bistro/deleteComment}" method="post">
+								<input type="hidden" name="id" th:value="${comment.ID}">
+								<button type="submit" class="delete"
+									onclick="return confirm('確定要刪除嗎？');">刪除</button>
+							</form>
 						</td>
 					</tr>
 
 				</tbody>
 			</table>
 
-			<div style="width: 30%; display: block">
+			<div id="addEventModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>新增評論資料</h1>
+					<form th:action="@{/Bistro/postComment}" method="post"
+						enctype="multipart/form-data" id="dataForm">
 
 
-				<form th:action="@{/Bistro/postComment}" method="post"
-					enctype="multipart/form-data" id="dataForm">
-
-
-					<div class="question">
-						<label for="memberId">會員ID：</label> <input type="text"
-							id="memberId" name="memberId" class="form-control" />
-					</div>
+						<div class="question">
+							<label for="memberId">會員ID：</label> <input type="text"
+								id="memberId" name="memberId" class="form-control" />
+						</div>
 
 
 
-					<div class="question">
-						<label for="categorySelect">餐點分類：</label> <select
-							id="categorySelect" name="categorySelect" class="form-select">
-							<option value="">請選擇一個分類</option>
-						</select>
-					</div>
+						<div class="question">
+							<label for="categorySelect">餐點分類：</label> <select
+								id="categorySelect" name="categorySelect" class="form-select">
+								<option value="">請選擇一個分類</option>
+							</select>
+						</div>
 
 
-					<div class="question">
-						<label for="menuSelect">餐點：</label> <select id="menuSelect"
-							name="menuSelect" disabled class="form-select">
-							<option value="">請選擇一個餐點</option>
-						</select>
-					</div>
+						<div class="question">
+							<label for="menuSelect">餐點：</label> <select id="menuSelect"
+								name="menuSelect" disabled class="form-select">
+								<option value="">請選擇一個餐點</option>
+							</select>
+						</div>
 
 
-					<div class="question">
-						<label for="commentRating" class="title">評論分數</label> <input
-							type="number" id="commentRating" name="commentRating" value=""
-							placeholder="1分~5分" required aria-required="true" min="1" max="5"
-							class="form-control" />
-					</div>
+						<div class="question">
+							<label for="commentRating" class="title">評論分數</label> <input
+								type="number" id="commentRating" name="commentRating" value=""
+								placeholder="1分~5分" required aria-required="true" min="1"
+								max="5" class="form-control" />
+						</div>
 
-					<div class="question">
-						<label for="commentMessage" class="title">評論</label>
-						<textarea name="commentMessage" placeholder="" id="commentMessage"
-							class="form-control"></textarea>
-					</div>
+						<div class="question">
+							<label for="commentMessage" class="title">評論</label>
+							<textarea name="commentMessage" placeholder=""
+								id="commentMessage" class="form-control"></textarea>
+						</div>
 
-					<!-- 區域1 -->
+						<!-- 區域1 -->
 
-					<!---------------------------底下為按鈕區---------------------------------------------- -->
-					<div id="buttonbox">
-						<button type="submit" id="save" class="formbutton"
-							onclick="submitForm(event) ">儲存</button>
-						<button type="reset" id="reset" class="formbutton"
-							onclick="resetPreview()">重設</button>
-					</div>
-				</form>
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton"
+								onclick="submitForm(event) ">儲存</button>
+							<button type="reset" id="reset" class="formbutton"
+								onclick="resetPreview()">重設</button>
+						</div>
+					</form>
+				</div>
+				<!-- modal-content -->
 			</div>
-			<!-- modal-content -->
-		</div>
-		<!-- addEventModal 跳出表單 -->
+			<!-- addEventModal 跳出表單 -->
 
+
+
+			<div id="addEventModal2" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>編輯評論資料</h1>
+					<form th:action="@{/Bistro/postComment}" method="post"
+						enctype="multipart/form-data" id="dataForm">
+
+
+
+
+						<label for="ID"></label> <input type="hidden" name="ID" id="ID"
+							readonly>
+
+						<div class="question">
+							<label for="memberId2">會員ID：</label> <input type="text"
+								id="memberId2" name="memberId" class="form-control" readonly />
+						</div>
+
+
+
+						<div class="question">
+							<label for="categorySelect2">餐點分類：</label> <select
+								id="categorySelect2" name="categorySelect" class="form-select">
+								<option value="">請選擇一個分類</option>
+							</select>
+						</div>
+
+
+						<div class="question">
+							<label for="menuSelect2">餐點：</label> <select id="menuSelect2"
+								name="menuSelect" disabled class="form-select">
+								<option value="">請選擇一個餐點</option>
+							</select>
+						</div>
+
+
+						<div class="question">
+							<label for="commentRating2" class="title">評論分數</label> <input
+								type="number" id="commentRating2" name="commentRating" value=""
+								placeholder="1分~5分" required aria-required="true" min="1"
+								max="5" class="form-control" />
+						</div>
+
+						<div class="question">
+							<label for="commentMessage2" class="title">你的評論</label>
+							<textarea name="commentMessage" placeholder=""
+								id="commentMessage2" class="form-control"></textarea>
+						</div>
+
+
+						<div class="question">
+							<label for="commentTime2" class="title">評論時間</label> <input
+								type="datetime-local" name="commentTime" id="commentTime2"></input>
+						</div>
+
+						<!-- 區域1 -->
+
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton"
+								onclick="submitForm(event) ">儲存</button>
+							<button type="reset" id="reset" class="formbutton"
+								onclick="resetPreview()">重設</button>
+						</div>
+					</form>
+				</div>
+				<!-- modal-content -->
+			</div>
+			<!-- addEventModal 跳出表單 -->
+
+
+
+
+
+
+		</div>
 	</div>
 
 
 	<script>
+	
+	document.getElementById("addData").addEventListener("click", () => {
+    	document.getElementById("addEventModal").style.display = "block";
+ 	 });
+
+	document.querySelectorAll(".close").forEach(closeButton => {
+	    closeButton.addEventListener("click", () => {
+	        document.getElementById("addEventModal").style.display = "none";
+	        document.getElementById("addEventModal2").style.display = "none";
+
+	         
+	    });
+	});
+
+      window.onclick = function (event) {
+        const modal = document.getElementById("addEventModal");
+        const modal2 = document.getElementById("addEventModal2");
+
+        if (event.target == modal || event.target == modal2) {
+          document.getElementById("addEventModal").style.display = "none";
+          document.getElementById("addEventModal2").style.display = "none";
+
+        }
+      };
+      
+      function openEditModal(comment) {
+    	document.getElementById("addEventModal2").style.display = "block";
+    	document.getElementById("ID").value =comment.ID;
+    	document.getElementById("memberId2").value =comment.memberId;
+    	document.getElementById("categorySelect2").value =comment.categorySelect;
+	  	document.getElementById("menuSelect2").value =comment.commentProduct;
+	  	document.getElementById("commentRating2").value =comment.commentRating;
+	  	document.getElementById("commentMessage2").value =comment.commentMessage;
+	  	document.getElementById("commentTime2").value =comment.commentTime;
+	    }
+	
+	
+
+	
 	
 function loadCategories() {
   fetch("/api/categories")
@@ -245,6 +400,51 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 }
+
+//-----------------------新增評論---------------------
+
+
+//-----------------------刪除評論---------------------
+
+function deleteComment(commentId) { 
+    const requestData = { ID: commentId };  // 組織請求資料
+
+    fetch('/Bistro/deleteComment', { 
+        method: 'POST', 
+        headers: { 
+            'Content-Type': 'application/json'  // 設置請求為 JSON 格式
+        }, 
+        body: JSON.stringify(requestData)  // 將資料轉換為 JSON 格式
+    })
+    .then(response => { 
+        if (response.ok) { 
+            alert('Comment deleted successfully'); 
+            
+        } else { 
+            alert('Failed to delete comment');  // 刪除失敗
+        }
+    })
+    .catch(error => { 
+        console.error('Error deleting comment:', error); 
+        alert('Error deleting comment');
+    });
+}
+
+
+
+
+
+
+
+//-----------------------刪除評論---------------------
+
+
+
+
+
+
+
+
     
     </script>
 </body>

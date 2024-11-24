@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +18,11 @@ import com.example.bistro.members.Members;
 import com.example.bistro.menu.Menu;
 import com.example.bistro.menu.MenuService;
 
-import jakarta.servlet.http.HttpSession;
+
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class CommentController {
@@ -42,11 +42,7 @@ public class CommentController {
 		return "comment/showAllCommentView";
 	}
 
-	@GetMapping("/Bistro/addComment")
-	public String addComment() {
 
-		return "comment/commentPostView";
-	}
 
 	@GetMapping("/api/categories")
 	public ResponseEntity<List<String>> getCategories() {
@@ -103,15 +99,6 @@ public class CommentController {
 		return "comment/showAllCommentByMemberView";
 	}
 
-	@DeleteMapping("Bistro/deleteComment/{ID}")
-	public ResponseEntity<Void> deleteComment(@PathVariable Integer ID) {
-		boolean isDeleted = commentService.deleteComment(ID);
-
-		if (isDeleted) {
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
-	}
+	
 
 }
