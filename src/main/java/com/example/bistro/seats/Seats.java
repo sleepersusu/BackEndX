@@ -1,48 +1,27 @@
 package com.example.bistro.seats;
 
-import java.util.List;
 
-import com.example.bistro.orders.Orders;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
 @Table(name = "Seats")
 public class Seats {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Integer ID;
-
-private String seatType;
-
-
-
-@OneToMany(mappedBy = "seats", cascade = CascadeType.ALL)
-private List <Orders> orders;
+    //PK
+        //座位號碼
+            @Id
+            @GeneratedValue(strategy = GenerationType.IDENTITY)
+            private Integer ID;
+    //欄位
+        //座位類型
+            private String seatType;
 
 
-
-public Integer getID() {
-	return ID;
-}
-
-public void setID(Integer iD) {
-	ID = iD;
-}
-
-public String getSeatType() {
-	return seatType;
-}
-
-public void setSeatType(String seatType) {
-	this.seatType = seatType;
-}
-
+    public Seats() {};
 
 }

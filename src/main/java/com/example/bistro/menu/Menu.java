@@ -2,6 +2,7 @@ package com.example.bistro.menu;
 
 
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,9 +26,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
+
 @Entity
 @Table(name = "Menu")
 public class Menu {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -206,5 +209,6 @@ public class Menu {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
+
 
 }
