@@ -129,13 +129,7 @@ body .modal .modal-content form textarea {
 
 		<div th:replace="~{layout/navbar}"></div>
 		<div id="right">
-			<header>
-
-				<button id="logout">
-					<a href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i>
-						Log Out</a>
-				</button>
-			</header>
+			<div th:replace="~{layout/headerlogout.html}"></div>
 
 			<main>
 				<h2>訂單管理</h2>
@@ -171,7 +165,7 @@ body .modal .modal-content form textarea {
 							<tbody id="event-list">
 								<tr  th:each="orders:${allOrders}">
 									<td th:text="${orders.ID}"></td>
-									<td th:text="${orders.members != null ? orders.members.ID : '非會員'}"></td>
+									<td th:text="${orders.members != null ? orders.members.id : '非會員'}"></td>
 									<td th:text="${orders.ordersName}"></td>
 									<td th:text="${orders.ordersTel}"></td>
 									<td th:text="${orders.seatType}"></td>

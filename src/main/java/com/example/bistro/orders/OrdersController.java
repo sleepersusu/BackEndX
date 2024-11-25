@@ -1,15 +1,7 @@
 package com.example.bistro.orders;
 
-import com.example.bistro.employee.Employee;
-import com.example.bistro.employee.EmployeeRepositoryDao;
-import com.example.bistro.members.Members;
-import com.example.bistro.members.MembersRepositoryDao;
-import com.example.bistro.menu.Menu;
-import com.example.bistro.menu.MenuRepositoryDao;
-import com.example.bistro.ordersDetails.OrdersDetails;
-import com.example.bistro.payment.Payment;
-import com.example.bistro.seats.Seats;
-import com.example.bistro.seats.SeatsRepositoryDao;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import com.example.bistro.employee.EmployeeRepository;
+import com.example.bistro.members.MemberRepository;
+import com.example.bistro.members.Members;
+import com.example.bistro.menu.MenuRepositoryDao;
+import com.example.bistro.payment.Payment;
+import com.example.bistro.seats.Seats;
+import com.example.bistro.seats.SeatsRepositoryDao;
 
 @Controller
 public class OrdersController {
@@ -29,11 +25,11 @@ public class OrdersController {
     @Autowired
     private OrdersRepository ordersRepository;
     @Autowired
-    private MembersRepositoryDao membersRepositoryDao;
+    private MemberRepository membersRepositoryDao;
     @Autowired
     private SeatsRepositoryDao seatsRepositoryDao;
     @Autowired
-    private EmployeeRepositoryDao employeeRepositoryDao;
+    private EmployeeRepository employeeRepositoryDao;
     @Autowired
     private MenuRepositoryDao menuRepositoryDao;
 

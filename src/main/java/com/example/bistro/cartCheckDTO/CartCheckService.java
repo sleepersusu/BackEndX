@@ -1,5 +1,12 @@
 package com.example.bistro.cartCheckDTO;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.bistro.cart.Cart;
 import com.example.bistro.cart.CartRepositoryDao;
 import com.example.bistro.menu.Menu;
@@ -7,13 +14,6 @@ import com.example.bistro.menu.MenuRepositoryDao;
 import com.example.bistro.orders.Orders;
 import com.example.bistro.orders.OrdersRepository;
 import com.example.bistro.ordersDetails.OrdersDetails;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CartCheckService {
@@ -43,9 +43,9 @@ public class CartCheckService {
             ordersRepository.save(order);
 
         // 2. 從購物車中完成生成訂單詳情
-            List<Cart> carts = cartRepositoryDao.findByMemberId(cartCheck.getMember().getID());
+            List<Cart> carts = cartRepositoryDao.findByMemberId(cartCheck.getMember().getId());
             if (carts.isEmpty()) {
-                throw new IllegalArgumentException("該會員的購物車記錄不存在，ID：" + cartCheck.getMember().getID());
+                throw new IllegalArgumentException("該會員的購物車記錄不存在，ID：" + cartCheck.getMember().getId());
             }
             for (Cart cart : carts) {
                 OrdersDetails orderDetails = new OrdersDetails();
@@ -65,7 +65,7 @@ public class CartCheckService {
         // 3. 保存訂單
             ordersRepository.save(order);
         // 4. 將購物車清空
-            cartRepositoryDao.deleteByMemberId(cartCheck.getMember().getID());
+            cartRepositoryDao.deleteByMemberId(cartCheck.getMember().getId());
     }
 }
 
