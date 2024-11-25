@@ -1,5 +1,6 @@
 package com.example.bistro.payment;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,5 +8,6 @@ import org.springframework.stereotype.Service;
 public class PaymentService {
 
     @Autowired
-    PaymentRepositoryDao paymentRepositoryDao;
+    private PaymentRepository paymentRepository;
+
 }

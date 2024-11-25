@@ -12,13 +12,13 @@ import java.util.List;
 public interface CartRepositoryDao extends JpaRepository<Cart, Integer> {
 
 
-    @Query("SELECT c FROM Cart c WHERE c.members.ID = :memberId")
+    @Query("SELECT c FROM Cart c WHERE c.members.id = :memberId")
     List<Cart> findByMemberId(@Param("memberId") Integer memberId);
 
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Cart c WHERE c.members.ID = :membersId")
+    @Query("DELETE FROM Cart c WHERE c.members.id = :membersId")
     void deleteByMemberId(@Param("membersId") Integer membersId);
 
 }
