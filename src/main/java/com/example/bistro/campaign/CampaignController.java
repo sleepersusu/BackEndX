@@ -32,6 +32,7 @@ public class CampaignController {
 	public String createPost(@RequestParam String campaignTitle, 
 							@RequestParam String campaignDescription, 
 							@RequestParam String campaignType, 
+							@RequestParam Integer minOrderAmount,
 							@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @RequestParam Date startDate,
 							@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") @RequestParam Date endDate,
 							@RequestParam String note) {
@@ -39,6 +40,7 @@ public class CampaignController {
 		campaign.setCampaignTitle(campaignTitle);
 		campaign.setCampaignDescription(campaignDescription);
 		campaign.setCampaignType(campaignType);
+		campaign.setMinOrderAmount(minOrderAmount);
 		campaign.setStartDate(startDate);
 		campaign.setEndDate(endDate);
 		campaign.setNote(note);
@@ -57,6 +59,7 @@ public class CampaignController {
 	        campaign.setCampaignTitle(request.getParameter("campaignTitle"));
 	        campaign.setCampaignDescription(request.getParameter("campaignDescription"));
 	        campaign.setCampaignType(request.getParameter("campaignType"));
+	        campaign.setMinOrderAmount(Integer.parseInt(request.getParameter("minOrderAmount")));
 	        campaign.setNote(request.getParameter("note"));
 	        
 	       

@@ -1,6 +1,7 @@
 package com.example.bistro.campaignPrize;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,12 @@ public class CampaignPrizesController {
 	}
 
 	@PostMapping("/Bistro/campaign/prize/create")
-	public String insertPrize(@RequestParam Integer campaignId, @RequestParam String prizeName,
-			@RequestParam MultipartFile prizeImg, @RequestParam Integer prizeQuantity,
-			@RequestParam String prizeDescription) throws IOException {
+	public String insertPrize(@RequestParam Integer campaignId,
+								@RequestParam String prizeName,
+								@RequestParam MultipartFile prizeImg, 
+								@RequestParam Integer prizeQuantity,
+								@RequestParam String prizeDescription,
+								@RequestParam BigDecimal probability) throws IOException {
 
 		byte[] imgByte = prizeImg.getBytes();
 		Campaign campaign = campaignService.findCampaignById(campaignId);
@@ -48,6 +52,7 @@ public class CampaignPrizesController {
 		prizes.setPrizeImg(imgByte);
 		prizes.setPrizeQuantity(prizeQuantity);
 		prizes.setPrizeDescription(prizeDescription);
+		prizes.setProbability(probability);
 		prizes.setCampaign(campaign);
 		campaignPrizeService.insertPrize(prizes);
 
@@ -72,9 +77,13 @@ public class CampaignPrizesController {
 	}
 
 	@PostMapping("/Bistro/campaign/prize/update")
-	public String updatePrize(@RequestParam Integer id, @RequestParam Integer campaignId,
-			@RequestParam String prizeName, @RequestParam(required = false) MultipartFile prizeImg,
-			@RequestParam Integer prizeQuantity, @RequestParam String prizeDescription) throws IOException {
+	public String updatePrize(@RequestParam Integer id, 
+								@RequestParam Integer campaignId,
+								@RequestParam String prizeName, 
+								@RequestParam(required = false) MultipartFile prizeImg,
+								@RequestParam Integer prizeQuantity, 
+								@RequestParam String prizeDescription,
+								@RequestParam BigDecimal probability) throws IOException {
 
 		CampaignPrizes prize = campaignPrizeService.findPrizeById(id);
 		Campaign campaign = campaignService.findCampaignById(campaignId);
@@ -82,6 +91,7 @@ public class CampaignPrizesController {
 		prize.setPrizeName(prizeName);
 		prize.setPrizeQuantity(prizeQuantity);
 		prize.setPrizeDescription(prizeDescription);
+		prize.setProbability(probability);
 		prize.setCampaign(campaign);
 
 		
