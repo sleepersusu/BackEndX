@@ -17,9 +17,13 @@
 								class="fa-solid fa-house" style="color: #ffffff"></i> 首頁
 						</a></li>
 
-						<li class="menuitem"><a th:href="@{/product}"> <i
-								class="fa-solid fa-whiskey-glass"></i> 商品管理
-						</a></li>
+
+                        <li class="menuitem">
+                            <a th:href="@{/Bistro/findAllMenu}">
+                                <i class="fa-solid fa-whiskey-glass"></i> 商品管理
+                            </a>
+                        </li>
+
 
 						<li class="menuitem"><a th:href="@{/member}"> <i
 								class="fa-solid fa-address-card"></i> 會員管理
@@ -27,7 +31,7 @@
 							<ul class="dropdown">
 							</ul></li>
 
-						<li class="menuitem"><a th:href="@{/reservation}"> <i
+						<li class="menuitem"><a th:href="@{/Bistro/findAllReservations}"> <i
 								class="fa-regular fa-calendar-check"></i> 訂位管理
 						</a>
 							<ul class="dropdown">
@@ -73,6 +77,11 @@
                             </a>
                             <ul class="dropdown">
                                 <li>
+                                    <a th:href="@{/Bistro/PointsTotal/showAll}">
+                                        <span class="arrow">&#9660;</span> 會員點數資料
+                                    </a>
+                                </li>
+                                <li>
                                     <a th:href="@{/Bistro/PointPrizes/showAll}">
                                         <span class="arrow">&#9660;</span>獎品管理
                                     </a>
@@ -87,13 +96,17 @@
                                         <span class="arrow">&#9660;</span> 獎品兌換紀錄
                                     </a>
                                 </li>
-                                <li>
-                                    <a th:href="@{/Bistro/PointsTotal/showAll}">
-                                        <span class="arrow">&#9660;</span> 會員點數資料
-                                    </a>
-                                </li>
+
                             </ul>
                         </li>
+
+
+                        <li class="menuitem">
+                         <a th:href="@{/Bistro/findAllComment}">
+                                <i class="fa-solid fa-comment"></i> 評論管理
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </div>

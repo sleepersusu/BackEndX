@@ -1,5 +1,6 @@
 package com.example.bistro.orders;
 
+
 import com.example.bistro.employee.Employee;
 import com.example.bistro.members.Members;
 import com.example.bistro.ordersDetails.OrdersDetails;
@@ -15,17 +16,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 @Setter
 @Getter
 @Entity
 @Table(name = "Orders")
 public class Orders {
 
+
+
    //PK
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "ID")
         private Integer ID;
+
 
   //欄位
         //訂單資訊

@@ -1,0 +1,673 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;     
+}
+#page {
+    display: flex;
+}
+
+th {
+    white-space: nowrap; 
+}
+
+/* 側邊欄CSS設定開始 ----------------------*/
+
+/* 螢幕寬度小於1025px時執行下面 */
+@media all and (max-width:1025px){
+    #sidebox{
+        padding-right: 50%;
+    }
+
+}
+/* 螢幕寬度小於1025px時執行 */
+#left{
+    width: 15%;
+    background-color: #424242;
+    min-width: 140px;
+    text-align: center;
+    white-space: nowrap;
+    position: fixed;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar{
+    display: flex;
+    flex-direction: column;
+}
+
+#logo{
+    position: relative;
+}
+
+#logo img{
+    margin: 20px 0;
+    width: 50%;
+    border-radius: 10px;
+} 
+
+#menubox{
+    text-align: left;
+    margin: auto;
+    width: 57%;
+    font-size: 18px;
+}
+
+.menu{
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu i{
+	height: 1rem;
+	width: 2rem;
+}
+
+.menuitem{
+    color: #271717;
+    padding: 0;
+    margin-bottom: 0.8rem;
+}
+
+.menuitem a{
+    height: 100%;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.menuitem > a:hover{
+    background-color: gray;
+    scale: 1.1;
+    box-shadow: 5px 5px 5px black;
+    border-radius: 5px;
+}
+.menuitem > a:active{
+    background-color: rgb(239, 0, 0);
+}
+.menuitem:hover .dropdown {
+    display: block;
+    height: auto;
+    border-radius: 5px;
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 1s ease-in-out;
+}
+
+.dropdown {
+    display: block;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    background-color: #5e5e5e;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1s ease-in-out;
+}
+
+.dropdown a:hover{
+    background-color: rgb(155, 155, 155);
+    transform: scale(1.1);
+    border-radius: 5px;
+}
+
+.dropdown li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+.dropdown a:active{
+    background-color: rgb(239, 0, 0);
+}
+
+.arrow{
+	display: inline-block;
+    transform: rotate(270deg);
+    font-size: 12px;
+    margin-right: 1rem;
+}
+
+
+
+
+/* 側邊欄CSS設定結束 */
+
+#right{
+    padding-left: 15%;
+    display: flex;
+    flex-direction: column;
+    background-color:lightgray;
+}
+
+/* main header 登出 CSS設定開始 ----------*/
+header{
+    background-color: white;
+    text-align: end;
+    width: 85%;
+    position: fixed;
+    align-content: center;
+    padding-bottom: 10px;
+    z-index:1;
+}
+
+header button{
+    margin-right: 50px;
+    margin-top: 10px;
+    width: 53px;
+    height: 35px;
+    border-radius: 5px;
+    background-color: white;
+}
+
+header button:hover,.dataButton:hover{
+    background-color:gray;
+    color : white;
+}
+/* main header 登出 CSS設定結束 ----------*/
+
+h2{
+    margin-top: 10px;
+}
+
+
+main{
+    width: 90%;
+    padding-left: 100px;
+    padding-top:60px;
+    z-index: 0.9;
+}
+
+#workspace{
+    width: 90%;
+    padding:  10px 0px 10px 0px;
+    background-color: white;
+    margin: 30px 0;
+}
+
+button{
+    cursor: pointer;
+}
+.dataButton{
+    background-color: #fff;
+    width: 100px;
+    height: 25px;
+    border-radius: 3px 3px 3px 3px;
+    font-size: 14px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+
+#selected,#selected2{
+    display: flex;
+}
+
+#selectAll,#reset,#selectAll2,#reset2{
+border: none;
+font-weight: bold;
+font-size: 16px;
+background-color: transparent;
+margin-left: 10px;
+}
+
+#selectAll:hover,
+#reset:hover,
+#selectAll2:hover,
+#reset2:hover{
+    text-decoration: underline;
+    color: #0071e3;
+}
+
+#selectAll:active,
+#reset:active,
+#selectAll2:active,
+#reset2:active
+{
+    text-decoration: underline;
+    color: #0071e3;
+    opacity: 0.5;
+}
+
+
+table {
+    background-color: white;
+    border-collapse: collapse;
+    border-radius: 5px;
+    table-layout: fixed;
+}
+
+
+
+
+section:last-child{
+    border-bottom: none;
+}
+
+table tr,table td{
+    word-break: break-word;
+    text-align: left;
+}
+
+td img{
+    width: 80px;
+} 
+/* <!-- 表格內照片-->  */
+
+
+
+
+
+footer{
+    margin-top: 100px;
+    background-color: lightgray;
+    border-top: 1px gray solid;
+    text-align: center;
+    font-size: 0.1em;
+    font-family: sans-serif;
+    color: #fff;
+}
+
+/* -------------------------------table額外調整區----------------------------------- */
+
+
+#membersTable tr th:nth-child(4),
+#membersTable tr td:nth-child(4),
+#membersTable tr th:nth-child(8),
+#membersTable tr td:nth-child(8),
+#membersTable tr th:nth-child(10),
+#membersTable tr td:nth-child(10),
+#membersTable tr th:nth-child(11),
+#membersTable tr td:nth-child(11){
+    word-break: break-word;
+    white-space:pre-wrap;
+}
+
+#reviewsTable tr th:nth-child(7),
+#reviewsTable tr td:nth-child(7){
+    word-break: break-word;
+    white-space:pre-wrap;
+}
+
+#websiteTable2 tr td{
+    word-break: break-word;
+    white-space:pre-wrap;
+        
+    }
+
+    #websiteTable2 tr th:nth-child(2), #websiteTable2>tr>td:nth-child(2){
+        width: 100px;
+    }
+
+/* -------------------------------table額外調整區----------------------------------- */
+
+
+
+/* ---------------------------按鈕動畫開始------------------------------------------ */
+
+
+/* 10/17新增 */
+
+/* tr 增加class fade-out */
+.fade-out {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+.fade-out.disappear {
+    opacity: 0;
+    background-color: lightgray;
+    transform: scale(0);
+}
+/* 10/17新增 */
+
+
+
+
+
+
+
+
+
+
+/* ---------------------------按鈕動畫結束------------------------------------------ */
+
+
+
+/*------------------------------- datatable套件不要動 -------------------------------------*/
+
+
+div.dt-container .dt-paging .dt-paging-button {  
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0.5em 1em;
+    margin-left: 2px;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    border: 1px solid ;
+    border-radius: 2px;
+
+}
+/* 頁數 */
+
+.dt-layout-cell.dt-layout-end{
+    margin-right: 100px;
+}/* 搜尋區容器 */
+
+div.dt-container .dt-search input{ 
+    background-color: #fff;
+}/* 搜尋輸入區 */
+
+div.dt-container .dt-input{ 
+    background-color: #fff;
+}/* 下拉表單 */
+
+
+div.dt-container .dt-paging .dt-paging-button.current, div.dt-container .dt-paging .dt-paging-button.current:hover {
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to top, gray 5%, white 80%); 
+    /* 修改當前頁數按鈕顏色 */
+}
+
+
+
+
+
+table.dataTable th.dt-type-numeric, table.dataTable td.dt-type-numeric,
+table.dataTable th.dt-type-date,table.dataTable td.dt-type-date,
+table.dataTable th.dt-right, table.dataTable td.dt-right
+{
+text-align: left;
+} 
+
+
+
+/*------------------------------- datatable套件不要動 -------------------------------------*/
+
+/* form */
+
+
+body .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+body .modal .modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 30px 40px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    overflow: scroll;
+  }
+  body .modal .modal-content h2 {
+    margin-bottom: 1rem;
+  }
+  body .modal .modal-content form {
+    display: flex;
+    flex-direction: column;
+  }
+  body .modal .modal-content form input,
+  body .modal .modal-content form textarea {
+    margin-bottom: 16px;
+    /* border-radius: 30px; */
+    border: 2px solid rgb(215, 215, 215);
+
+
+    font-size: 0.9rem;
+  }
+  body .modal .modal-content form textarea {
+    width: 100%;
+    height: 200px;
+    overflow: auto;
+    resize: none;
+  }
+  body .modal .modal-content form input {
+    height: 30px;
+  }
+  body .modal .modal-content form button {
+    margin-top: 0.5rem;
+    align-self: center;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+  }
+  body .modal .modal-content .close {
+    float: right;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  body .modal .modal-content .close:hover, body .modal .modal-content .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }/*# sourceMappingURL=style.css.map */
+
+  .question{
+    padding-bottom: 20px;
+}
+
+.title{
+    float: left;
+    width: 100px;
+    text-align-last: justify;
+    padding-right: 20px;
+}
+
+#buttonbox{
+    text-align: center;
+}
+#save{
+    background-color: #0071e3;
+    border-radius: 10px;
+    color: white;
+    width: 100px;
+
+}
+
+#reset{
+    border-radius: 10px;
+    width: 100px;
+    background-color: white;
+    border: 1px black solid;
+}
+
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+/*---------------------------*/
+
+#save{
+    background-color: #0071e3;
+    border-radius: 10px;
+    color: white;
+    width: auto;
+    border: none;
+    font-size: 1rem;	
+    padding: 0.4rem 2rem;
+}
+
+#save:hover{
+	background-color: #2894FF;
+}
+
+#reset{
+    border-radius: 10px;
+    background-color: white;
+    color: #0071e3;
+    border: 1px solid #0071e3;
+    height: auto;
+    width: auto;
+    font-size: 1rem;
+    padding: 0.3rem 2rem;
+}
+
+#reset:hover{
+	text-decoration: none;
+}
+
+#buttonbox{
+	margin-top: 0.5rem
+}
+
+#logout{
+	padding: 0.6rem 1.4rem;
+	height: auto;
+	width: auto;
+	font-size: 0.8rem;
+	border-radius: 30px;
+	border: 1px solid #4F4F4F;		
+}
+
+#logout a{
+	text-decoration: none;
+	color:	#4F4F4F;
+}
+
+#logout:hover{
+	background-color: #F0F0F0;
+}
+
+
+
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
+
+#edit, #delete,#recover {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+
+
+#recover {
+	background-color: green;
+	margin-bottom: 0.3rem;
+}
+
+#recover:hover {
+	background-color: lightgreen;
+}
+
+#dt-search-0 {
+	margin-right: 2rem
+}
+
+#dt-search-0:focus {
+	outline: none;
+}
+
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
+
+#addData:hover {
+	background-color: #2894FF;
+}
+
+.modal-content {
+	min-width: 700px;
+	height: 700px;
+	overflow: auto;
+}
+
+body .modal .modal-content form textarea {
+	width: 350px
+}
+
+#save {
+	background-color: #0071e3;
+	border-radius: 10px;
+	color: white;
+	width: auto;
+	border: none;
+	font-size: 1rem;
+	padding: 0.4rem 2rem;
+}
+
+#save:hover {
+	background-color: #2894FF;
+}
+
+#reset {
+	border-radius: 10px;
+	background-color: white;
+	color: #0071e3;
+	border: 1px solid #0071e3;
+	height: auto;
+	width: auto;
+	font-size: 1rem;
+	padding: 0.3rem 2rem;
+}
+
+#reset:hover {
+	text-decoration: none;
+}
+
+#buttonbox {
+	margin-top: 0.5rem
+}
+
+.out-of-stock{
+	color:red;
+}
