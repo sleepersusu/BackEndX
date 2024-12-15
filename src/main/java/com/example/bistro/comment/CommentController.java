@@ -85,7 +85,7 @@ public class CommentController {
 
 	}
 
-	@GetMapping("Bistro/findAllCommentByMember/{memberId}")
+	@GetMapping("/Bistro/findAllCommentByMember/{memberId}")
 	public String findAllCommentByMember(@PathVariable Integer memberId, Model model) {
 
 		List<Comment> comments = commentService.findCommentByMembers(memberId);

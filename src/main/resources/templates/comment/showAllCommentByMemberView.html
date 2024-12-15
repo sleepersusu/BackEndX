@@ -75,7 +75,7 @@
 					<tr th:each="comment : ${allComments}" class="fade-out">
 						<td th:text="${comment.commentProduct}"></td>
 						<td th:text="${comment.menu.productCategory}"></td>
-						<td th:text="${comment. commentRating}"></td>
+						<td th:text="${comment.commentRating}"></td>
 						<td th:text="${comment.commentMessage}"></td>
 						<td th:text="${{comment.commentTime}}"></td>
 						<td>
@@ -83,7 +83,7 @@
 								th:onclick="openEditModal({
         										ID: [[${comment.ID}]], 
         										
-       											memberId: [[${comment.member.ID}]],
+       											memberId: [[${comment.members.Id}]],
        											
        											categorySelect:[[${comment.menu.productCategory}]],
        											commentProduct: [[${comment.commentProduct}]],

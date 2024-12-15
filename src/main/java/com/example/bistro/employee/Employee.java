@@ -43,13 +43,14 @@ public class Employee {
     @Temporal(TemporalType.DATE)
 	private Date employeeBorn;
 	private String employeeTel;
-	private Integer employeeSeniority;
+	private Integer employeeSeniority;//年資
 	private Integer employeeSalary;
 	private String employeeStatus;
 	
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(updatable = false,insertable = false)
     private Date createdAt  ;
 	
     @ManyToOne(fetch = FetchType.LAZY)

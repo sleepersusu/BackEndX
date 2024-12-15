@@ -18,20 +18,30 @@
 						</a></li>
 
 
-                        <li class="menuitem">
-                            <a th:href="@{/Bistro/findAllMenu}">
-                                <i class="fa-solid fa-whiskey-glass"></i> 商品管理
-                            </a>
-                        </li>
+						<li class="menuitem"><a th:href="@{/Bistro/findAllMenu}">
+								<i class="fa-solid fa-whiskey-glass"></i> 商品管理
+						</a></li>
 
 
-						<li class="menuitem"><a th:href="@{/member}"> <i
-								class="fa-solid fa-address-card"></i> 會員管理
+						<li class="menuitem"><a href="#"> <i
+								class="fa-solid fa-address-card"></i> 帳號管理
 						</a>
+							<ul class="dropdown">
+								<li><a th:href="@{/Bistro/Member/findAllMembers}"> <span
+										class="arrow">&#9660;</span> 會員管理
+								</a></li>
+								<li><a th:href="@{/Bistro/Employee/findAllEmployees}">
+										<span class="arrow">&#9660;</span> 員工管理
+								</a></li>
+							</ul></li>
+
+						<li class="menuitem"><a th:href="@{/}"><i
+								class="fa-solid fa-pen-to-square"></i> 帳戶簽核 </a>
 							<ul class="dropdown">
 							</ul></li>
 
-						<li class="menuitem"><a th:href="@{/Bistro/findAllReservations}"> <i
+						<li class="menuitem"><a
+							th:href="@{/Bistro/findAllReservations}"> <i
 								class="fa-regular fa-calendar-check"></i> 訂位管理
 						</a>
 							<ul class="dropdown">
@@ -39,18 +49,14 @@
 							</ul></li>
 
 
-                        <li class="menuitem">
-                            <a th:href="@{/Bistro/Orders/findAll}">
-                                <i class="fa-regular fa-clipboard"></i> 訂單管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                    <a th:href="@{/Bistro/ordersDetails/findAll}">
-                                        <span class="arrow">&#9660;</span> 訂單詳情
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+						<li class="menuitem"><a th:href="@{/Bistro/Orders/findAll}">
+								<i class="fa-regular fa-clipboard"></i> 訂單管理
+						</a>
+							<ul class="dropdown">
+								<li><a th:href="@{/Bistro/ordersDetails/findAll}"> <span
+										class="arrow">&#9660;</span> 訂單詳情
+								</a></li>
+							</ul></li>
 
 
 						<li class="menuitem"><a th:href="@{/Bistro/campaign/findAll}">
@@ -71,47 +77,36 @@
 								</a></li>
 							</ul></li>
 
-                        <li class="menuitem">
-                            <a th:href="@{/Bistro/PointPrizes/showAll}">
-                                <i class="fa-solid fa-user"></i> 點數管理
-                            </a>
-                            <ul class="dropdown">
-                                <li>
-                                    <a th:href="@{/Bistro/PointsTotal/showAll}">
-                                        <span class="arrow">&#9660;</span> 會員點數資料
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/Bistro/PointPrizes/showAll}">
-                                        <span class="arrow">&#9660;</span>獎品管理
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/Bistro/PointGet/showAll}">
-                                        <span class="arrow">&#9660;</span> 獲得積分紀錄
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/Bistro/PointsRecords/showAll}">
-                                        <span class="arrow">&#9660;</span> 獎品兌換紀錄
-                                    </a>
-                                </li>
+						<li class="menuitem"><a
+							th:href="@{/Bistro/PointPrizes/showAll}"> <i
+								class="fa-solid fa-user"></i> 點數管理
+						</a>
+							<ul class="dropdown">
+								<li><a th:href="@{/Bistro/PointsTotal/showAll}"> <span
+										class="arrow">&#9660;</span> 會員點數資料
+								</a></li>
+								<li><a th:href="@{/Bistro/PointPrizes/showAll}"> <span
+										class="arrow">&#9660;</span>獎品管理
+								</a></li>
+								<li><a th:href="@{/Bistro/PointGet/showAll}"> <span
+										class="arrow">&#9660;</span> 獲得積分紀錄
+								</a></li>
+								<li><a th:href="@{/Bistro/PointsRecords/showAll}"> <span
+										class="arrow">&#9660;</span> 獎品兌換紀錄
+								</a></li>
 
-                            </ul>
-                        </li>
+							</ul></li>
 
 
-                        <li class="menuitem">
-                         <a th:href="@{/Bistro/findAllComment}">
-                                <i class="fa-solid fa-comment"></i> 評論管理
-                            </a>
-                        </li>
+						<li class="menuitem"><a th:href="@{/Bistro/findAllComment}">
+								<i class="fa-solid fa-comment"></i> 評論管理
+						</a></li>
 
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
 
 </body>
 </html>

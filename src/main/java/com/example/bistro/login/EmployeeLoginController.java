@@ -1,8 +1,12 @@
 package com.example.bistro.login;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,23 +26,19 @@ public class EmployeeLoginController {
 	@Autowired
 	private EmployeeService employeeService;
 	
-    @GetMapping("/api/remainingTime")
+    @GetMapping("/api/checkTime")
     @ResponseBody  // 用來返回 JSON 格式的數據
-    public ResponseEntity<Long> getRemainingTime(HttpSession session) {
-    	long currentTime = System.currentTimeMillis();
-    	long lastAccessTime=0;
-    	long reoprtTime=0;
-    	long remainingTime =0;
-    	long maxTime =(long) session.getMaxInactiveInterval()*1000;
-    	if (session != null && session.getAttribute("lastAccessTime") != null) {
-    	    lastAccessTime = (long) session.getAttribute("lastAccessTime");
-    	    reoprtTime=currentTime-lastAccessTime;
-    	    remainingTime=maxTime - reoprtTime;
-    	}
-        if (remainingTime < 0) {
-            remainingTime = 0;
+    public ResponseEntity<?> getRemainingTime(HttpSession session) {
+        if (session == null) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "Session is null"));
         }
-        return ResponseEntity.ok(remainingTime);
+    	int maxTime = session.getMaxInactiveInterval();
+    	
+    	Map<String, Integer> response = new HashMap<>();
+        response.put("totalTime", maxTime);
+        
+        return ResponseEntity.ok(response);
     }
 	
 	
@@ -51,7 +51,7 @@ public class EmployeeLoginController {
 		if (checkResult.isPresent()) {
 			long currentTime = System.currentTimeMillis();
 			System.out.println("登入成功，建立Session");
-			httpSession.setMaxInactiveInterval(60);//session存活時間sec
+			httpSession.setMaxInactiveInterval(3600);//session存活時間sec
 			httpSession.setAttribute("lastAccessTime", currentTime);
 			httpSession.setAttribute("loginAccount", checkResult.get().getEmployeeAccount());
 			httpSession.setAttribute("loginId", checkResult.get().getId());

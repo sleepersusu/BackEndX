@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>會員管理 - DINEEASE餐廳管理系統</title>
+
+<link rel="icon" th:href="@{/images/favicon.ico}" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+	rel="stylesheet" />
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<link rel="stylesheet" th:href="@{/css/demo.css}" />
+<style>
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
+
+#edit, #delete {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+#dt-search-0 {
+	margin-right: 2rem
+}
+
+#dt-search-0:focus {
+	outline: none;
+}
+
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
+
+#addData:hover {
+	background-color: #2894FF;
+}
+
+.modal-content {
+	min-width: 700px;
+	height: 700px;
+	overflow: auto;
+}
+
+.radiomenu {
+	display: flex;
+	height: 30px;
+	margin-bottom: 16px;
+	padding: 5px 10px;
+	align-items: center;
+}
+
+.radiomenu .radiomenuitem {
+	padding: 5px;
+	margin-right: 10px;
+}
+
+.radiomenu .radiomenuitem>label {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.radiomenu .radiomenuitem>input {
+	vertical-align: middle;
+	position: relative;
+	top: 8px
+}
+
+
+</style>
+
+
+</head>
+
+<body>
+	<!-- datatable  -->
+	<script th:src="@{/jquery/jquery-3.7.1.js}" ></script>
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js" ></script>
+
+
+	<div id="page">
+		<div th:replace="~{layout/navbar}"></div>
+		<div id="right">
+			<div th:replace="~{layout/headerlogout.html}"></div>
+
+			<main>
+				<h2>會員資訊</h2>
+				<section id="workspace">
+					<div>
+						<button type="submit" class="dataButton" id="addData">
+							新增會員</button>
+					</div>
+				</section>
+
+				<section>
+					<div>
+						<table id="table" class="display">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>帳號</th>
+									<th>密碼</th>
+									<th>姓名</th>
+									<th>性別</th>
+									<th>出生日期</th>
+									<th>興趣</th>
+									<th>地址</th>
+									<th>聯絡電話</th>
+									<th>電子信箱</th>
+									<th>會員圖片</th>
+									<th>會員點數</th>
+									<th>狀態</th>
+									<th>帳戶</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="event-list">
+								<tr th:each="members : ${allMembers}">
+										<td th:text="${members.id}"></td>
+										<td th:text="${members.memberAccount}"></td>
+										<td th:text="${members.memberPassword==null?'無':members.memberPassword }"></td>
+										<td th:text="${members.memberName}"></td>
+										<td th:text="${members.memberSex==1 ? '男' : '女'}"
+										th:style="'color: ' + (${members.memberSex} == 1 ? '#0072E3' : 'red')"></td>
+										<td th:text="${members.memberBirthday==null?'無':members.memberBirthday}"></td>
+										<td th:text="${members.memberFavor==1 ? '外向' : '內向'}"></td>
+										<td th:text="${members.memberAddress==null?'無':members.memberAddress}"></td>
+										<td th:text="${members.memberPhone}"></td>
+										<td th:text="${members.memberEmail==null?'無':members.memberEmail}"></td>
+										<td><img alt="無圖片" th:src="@{/Bistro/download?type=menu&(ID=members.id)}"></td>
+										<td th:text="${members.memberPoint==null?'無':members.memberPoint}"></td>
+										<td th:text="${members.memberStatus}" th:style="'color:'+(${members.memberStatus} == '啟用' ? '#0072E3' : 'red')"></td>
+										<td th:text="${members.memberShip}" th:style="'color:'+(${members.memberShip} == '會員' ? '#0072E3' : 'red')"></td>
+
+										<td>
+										<!-- th:data-start-date="${#dates.format(members.memberBirthday, 'yyyy-MM-dd')}" -->
+											<button type="button" id="edit"
+												th:data-id="${members.id}"
+												th:data-account="${members.memberAccount}"
+												th:data-password="${members.memberPassword}"
+												th:data-name="${members.memberName}"
+												th:data-sex="${members.memberSex}"
+												th:data-birthday="${members.memberBirthday}"
+												th:data-favor="${members.memberFavor}"
+												th:data-address="${members.memberAddress}"
+												th:data-phone="${members.memberPhone}"
+												th:data-email="${members.memberEmail}"
+												th:data-Img="${members.memberImg}"
+												th:data-point="${members.memberPoint}"
+												th:data-status="${members.memberStatus}"
+												th:data-memberShip="${members.memberShip}"
+												onclick="openEditModal(this)">編輯</button>
+	
+											<form th:action="@{/Bistro/members/delete}" method="post"
+												style="display: inline;">
+												<input type="hidden" name="id" th:value="${members.id}">
+												<button type="submit" id="delete"
+													onclick="return confirm('確定要註銷帳號嗎？');">註銷</button>
+											</form>
+										</td>
+									</tr>
+									<tr th:if="${#lists.isEmpty(allMembers)}">
+										<td colspan="13">沒有活動資料</td>
+									</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</main>
+
+			<!--  新增會員視窗 -->
+			<div id="addEventModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>新增會員</h1>
+					<form action="CreateMembersServlet.do" method="post" id="dataForm"
+						enctype="multipart/form-data">
+						<fieldset>
+							<legend style="margin-bottom: 1rem; font-weight: bold">
+								會員基本資料 </legend>
+
+							<div class="question">
+								<span class="title">會員帳號</span> <input type="text" id="useraccount"
+									name="useraccount" value="" placeholder="請輸入會員帳號" required
+									aria-required="true" />
+							</div>
+							<div class="question">
+								<span class="title">會員密碼</span> <input type="text" id="userpwd"
+									name="userpwd" value="" placeholder="請輸入會員密碼" required
+									aria-required="true" />
+							</div>
+							<div class="question">
+								<span class="title">會員姓名</span> <input type="text" id="username"
+									name="username" value="" placeholder="請輸入會員姓名" required
+									aria-required="true" />
+							</div>
+
+							<div class="question">
+								<span class="title">會員性別:</span>
+								<div class="question">
+									<div class="radiomenu">
+										<div class="radiomenuitem">
+											<label for="male">男</label> <input type="radio"
+												name="usersex" id="male" value="1" required />
+										</div>
+										<div class="radiomenuitem">
+											<label for="female">女</label> <input type="radio"
+												name="usersex" id="female" value="0" required />
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="question">
+								<span class="title">出生日期</span> <input type="DATE"
+									id="userbirthday" name="userbirthday" value="" required />
+							</div>
+
+							<div class="question">
+								<span class="title">興趣</span>
+								<div class="radiomenu">
+									<div class="radiomenuitem">
+										<label for="introver">內向</label> <input type="radio"
+											name="userfavor" id="introver" value="0" required />
+									</div>
+									<div class="radiomenuitem">
+										<label for="extrovert">外向</label> <input type="radio"
+											name="userfavor" id="extrovert" value="1" required />
+									</div>
+								</div>
+							</div>
+
+							<div class="question">
+								<span class="title">會員地址</span> <input type="text"
+									id="useraddress" name="useraddress" value=""
+									placeholder="請輸入會員地址" />
+							</div>
+
+							<div class="question">
+								<span class="title">聯絡電話</span> <input type="text"
+									id="userphone" name="userphone" value="" placeholder="請輸入會員電話"
+									required />
+							</div>
+
+							<div class="question">
+								<span class="title">電子信箱</span> <input type="text"
+									id="useremail" name="useremail" value="" placeholder="請輸入會員信箱"
+									required />
+							</div>
+							<div class="question">
+								<span class="title">會員頭像</span> <input type="file" id="userimg"
+									name="userimg" value="" accept="image/*" />
+							</div>
+						</fieldset>
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton">儲存</button>
+							<button type="reset" id="reset" class="formbutton">重設</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!--  編輯會員視窗 -->
+			<div id="addEventModal2" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h1>編輯會員</h1>
+					<form th:action="@{/Bistro/Member/UpdateMember}" method="post" id="dataForm"
+						enctype="multipart/form-data">
+						<fieldset>
+							<legend style="margin-bottom: 1rem; font-weight: bold">
+								會員基本資料 </legend>
+							<input type="hidden" id="edituserid" name="id" value="">
+								<div class="question">
+									<span class="title">會員帳號</span> <input type="text"
+										id="edituseraccount" name="memberAccount" value=""
+										placeholder="請輸入會員帳號" />
+								</div>
+								<div class="question">
+									<span class="title">會員密碼</span> <input type="text"
+										id="edituserpwd" name="memberPassword" value=""
+										placeholder="請輸入會員密碼" />
+								</div>
+								<div class="question">
+									<span class="title">會員姓名</span> <input type="text"
+										id="editusername" name="memberName" value=""
+										placeholder="請輸入會員姓名" />
+								</div>
+
+								<div class="question">
+									<span class="title">會員性別:</span>
+									<div class="question">
+										<div class="radiomenu">
+											<div class="radiomenuitem">
+												<label for="male">男</label> <input type="radio"
+													id="editmale" name="memberSex" value="1"  />
+											</div>
+											<div class="radiomenuitem">
+												<label for="female">女</label> <input type="radio"
+													id="editfemale" name="memberSex" value="0"  />
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="question">
+									<span class="title">出生日期</span> <input type="DATE"
+										id="edituserbirthday" name="memberBirthday" value=""
+										/>
+								</div>
+
+								<div class="question">
+									<span class="title">興趣:</span>
+									<div class="radiomenu">
+										<div class="radiomenuitem">
+											<label for="introver">內向</label> <input type="radio"
+												id="editintrover" name="memberFavor" value="0"  />
+										</div>
+										<div class="radiomenuitem">
+											<label for="extrovert">外向</label> <input type="radio"
+												id="editextrovert" name="memberFavor" value="1"  />
+										</div>
+									</div>
+								</div>
+
+								<div class="question">
+									<span class="title">會員地址</span> <input type="text"
+										id="edituseraddress" name="memberAddress" value=""
+										placeholder="請輸入會員地址" />
+								</div>
+
+								<div class="question">
+									<span class="title">聯絡電話</span> <input type="text"
+										id="edituserphone" name="memberPhone" value=""
+										placeholder="請輸入會員電話" />
+								</div>
+
+								<div class="question">
+									<span class="title">電子信箱</span> <input type="text"
+										id="edituseremail" name="memberEmail" value=""
+										placeholder="請輸入會員信箱"/>
+								</div>
+								<div class="question">
+									<span class="title">會員頭像</span> <input type="file"
+										id="edituserimg" name="memberPhoto" value="" accept="image/*" />
+								</div>
+						</fieldset>
+						<!---------------------------底下為按鈕區---------------------------------------------- -->
+						<div id="buttonbox">
+							<button type="submit" id="save" class="formbutton">儲存</button>
+							<button type="reset" id="reset" class="formbutton">重設</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<footer> &copy; Made by TeamWork </footer>
+		</div>
+	</div>
+
+
+
+	<script>
+		// jquery寫法 start
+		$(document).ready(function() {
+			$("#table").DataTable({
+				scrollX : "90%",
+				scrollY : "500px",
+				paging: true, // 如果希望有分頁功能
+				searching: true, // 如果需要啟用搜尋功能
+				responsive: true, // 如果希望在不同尺寸螢幕上調整表格
+				autoWidth: false,
+		        "columnDefs": [
+		            {"width": "45px","targets": 0},
+		            {"width": "70px","targets": 1,className: 'ellipsis'},
+		            {"width": "70px","targets": 2,className: 'ellipsis'},
+		            {"width": "70px","targets": 3},
+		            {"width": "70px","targets": 4},
+		            {"width": "90px","targets": 5},
+		            {"width": "70px","targets": 6},
+		            {"width": "70px","targets": 7,className: 'ellipsis'},
+		            {"width": "95px","targets": 8},
+		            {"width": "95px","targets": 9,className: 'ellipsis'},
+		            {"width": "90px","targets": 10},
+		            {"width": "85px","targets": 11},
+		            {"width": "70px","targets": 12},
+		            {"width": "70px","targets": 13},
+		            {"width": "70px","targets": 14,"orderable": false},
+		        ]
+			});
+		});
+	    
+		// jquery寫法 end
+		
+		document.getElementById("addData").addEventListener("click", () => {
+        	document.getElementById("addEventModal").style.display = "block";
+     	 });
+
+		document.querySelectorAll(".close").forEach(closeButton => {
+		    closeButton.addEventListener("click", () => {
+		        document.getElementById("addEventModal").style.display = "none";
+		        document.getElementById("addEventModal2").style.display = "none";
+		    });
+		});
+
+	      window.onclick = function (event) {
+	        const modal = document.getElementById("addEventModal");
+	        const modal2 = document.getElementById("addEventModal2");
+	        if (event.target == modal || event.target == modal2) {
+	          document.getElementById("addEventModal").style.display = "none";
+	          document.getElementById("addEventModal2").style.display = "none";
+	        }
+	      };
+	      
+	      function openEditModal(btnData) {
+	    	  	console.log(btnData);
+		    	document.getElementById("addEventModal2").style.display = "block";
+		    	document.getElementById("edituserid").value = btnData.dataset.id;
+	    	    document.getElementById("edituseraccount").value = btnData.dataset.account;
+	    	    document.getElementById("edituserpwd").value = btnData.dataset.password;
+	    	    document.getElementById("editusername").value = btnData.dataset.name;
+	    	    
+	    	    if(btnData.dataset.sex==0){
+	    	    	document.getElementById("editfemale").checked=true;
+	    	    }else if(btnData.dataset.sex==1){
+	    	    	document.getElementById("editmale").checked=true;
+	    	    }else{
+	    	    	document.getElementById("editfemale").checked=false;
+	    	    	document.getElementById("editmale").checked=false;
+	    	    }
+	    	    
+	    	    document.getElementById("edituserbirthday").value = btnData.dataset.birthday;
+	    	    
+	    	    if(btnData.dataset.favor==0){
+	    	    	document.getElementById("editintrover").checked=true;
+	    	    }else if(btnData.dataset.favor==1){
+	    	    	document.getElementById("editextrovert").checked=true;
+	    	    }else{
+	    	    	document.getElementById("editintrover").checked=false;
+	    	    	document.getElementById("editextrovert").checked=false;
+	    	    }
+	    	    
+	    	    document.getElementById("edituseraddress").value = btnData.dataset.address; 
+	    	    document.getElementById("edituserphone").value = btnData.dataset.phone;
+	    	    document.getElementById("edituseremail").value = btnData.dataset.email;
+	    	    }
+
+	    </script>

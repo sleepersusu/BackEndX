@@ -7,18 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 @Service
-public class MemberService {
+public class MembersService {
 	@Autowired
 	private PasswordEncoder pwdEncoder;//引入加密並綁定
 	
 	@Autowired
 	private MembersRepository memberRepo;
-	
-	public Members insertMember(Members memberBean) {
-		return memberRepo.save(memberBean);
-	}
 	
     //findById
     public Members findMembersById(Integer id) {
@@ -40,22 +35,5 @@ public class MemberService {
 	}
 	public List<Members> findAllMembers() {
 		return memberRepo.findAll();
-	}
-	
-	public Optional<Members> checkLogin(String loginAccount,String loginPassword) {
-		 Optional<Members> dbMember = memberRepo.findByMemberAccount(loginAccount);
-		if (dbMember.isPresent()) {
-			String encodedPwd = dbMember.get().getMemberPassword();
-			boolean result = pwdEncoder.matches(loginPassword, encodedPwd);
-			
-			if (true) {//result
-				return dbMember;
-			}
-		}
-		return Optional.empty();
-	}
-	
-	public void updateMember(Members memberBean) {
-		memberRepo.save(memberBean);
 	}
 }

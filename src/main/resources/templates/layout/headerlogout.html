@@ -1,53 +1,91 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/">
-  <head>
-    <meta charset="UTF-8" />
-  </head>
-  <style>
-    header > span {
-      padding-left: 10px;
-      padding-right: 10px;
-      border: 1px solid black;
-      border-radius: 20px;
-    }
-  </style>
-  <body>
-    <header>
-      <span id="showLogoutTime"></span>
-	      <button id="logout">
-	        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
-	      </button>
-    </header>
-    <script>
-      function getRemainingTime() {
-        fetch("/api/remainingTime")
-          .then((response) => {
-            // 確保 response.ok，這樣我們才會處理 JSON 資料
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json(); // 解析 JSON
-          })
-          .then((data) => {
-            let remainingTime = parseInt(data / 1000);
-            document.getElementById("showLogoutTime").innerText =
-              remainingTime + " 秒";
 
-            if (remainingTime == 0) {
-              alert("超過時間無操作，系統即將登出");
-              window.location.href = '/';
-              clearInterval(countdownTimer);
-            }
-          })
-          .catch((error) => {
-            console.error("錯誤:", error);
-          });
+<head>
+  <meta charset="UTF-8" />
+</head>
+<style>
+  .Timebox{
+	padding-left: 15px;
+	padding-right: 15px;
+	transform: scale(0.95);  /* 将元素缩小 */
+	transform-origin: center;  /* 保证缩放从中心开始 */
+	border-radius: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 0 0 0.7px black;
+	margin-right: 5px;
+  }
+
+</style>
+
+<body>
+  <header>
+  	<div class="Timebox">
+	    <span id="showLogoutTime">00:30</span>
+  	</div>
+  	<div>
+	    <button id="logout">
+	      <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+	    </button>
+  	</div>
+  </header>
+  <script>
+    let timer;
+    let totalTime = 0;
+    function getTotalTime() {
+      fetch("http://localhost:8085/api/checkTime")
+        .then((response) => {
+          // 確保 response.ok，這樣我們才會處理 JSON 資料
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json(); // 解析 JSON
+        })
+        .then((data) => {
+          totalTime = data.totalTime;
+          localStorage.setItem('storageTime',totalTime)
+          startCountdown();
+        })
+        .catch((error) => {
+          console.error("錯誤:", error);
+        });
+    }
+    function formatTime(seconds) {
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      return `${minutes< 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    }
+    function countdown() {
+      totalTime--;
+      localStorage.setItem('newTime',totalTime)
+      countdownElement.textContent = formatTime(totalTime); // 格式化并更新倒计时显示
+      if (totalTime <= 0) {
+        alert("超過時間無操作，系統即將登出");
+        window.location.href = '/';
+        clearInterval(timer); // 停止计时器
       }
-      let countdownTimer = setInterval(getRemainingTime, 1000);
-      let logoutBtn =document.getElementById('logout') 
-      logoutBtn.addEventListener('click',function(){
-        window.location.href = '/logout';
+    }
+    function startCountdown(){
+      timer = setInterval(countdown, 1000);
+    }
+    window.onload = function() {
+      getTotalTime();
+      document.addEventListener('click', function(event) { //點擊刷新計時器
+        totalTime=Number(localStorage.getItem('storageTime'))+1
+        clearInterval(timer);
+        startCountdown()
       })
-    </script>
-  </body>
+    }
+    let countdownElement = document.getElementById('showLogoutTime');
+
+    //登出按鈕
+    let logoutBtn = document.getElementById('logout')
+    logoutBtn.addEventListener('click', function () {
+      window.location.href = '/logout';
+    })
+  </script>
+</body>
+
 </html>

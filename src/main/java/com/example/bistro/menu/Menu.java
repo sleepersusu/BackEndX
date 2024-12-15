@@ -54,7 +54,7 @@ public class Menu {
 	private String menuStatus;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd") // 前端輸入輸出時的格式對應，若須強制轉換格式，el 須使用雙層大括號
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "createdAt")
 	private Date createdAt;
 

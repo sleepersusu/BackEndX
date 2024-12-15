@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.bistro.employee.EmployeeRepository;
-import com.example.bistro.members.MemberRepository;
+import com.example.bistro.members.MembersRepository;
 import com.example.bistro.members.Members;
 import com.example.bistro.menu.MenuRepositoryDao;
 import com.example.bistro.payment.Payment;
@@ -25,7 +25,7 @@ public class OrdersController {
     @Autowired
     private OrdersRepository ordersRepository;
     @Autowired
-    private MemberRepository membersRepositoryDao;
+    private MembersRepository membersRepositoryDao;
     @Autowired
     private SeatsRepositoryDao seatsRepositoryDao;
     @Autowired

@@ -2,6 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org/">
 <head>
 <meta charset="UTF-8">
+
 <title>商品管理 - DINEEASE餐廳管理系統</title>
 <link rel="icon" th:href="@{/images/favicon.ico}" />
 
@@ -20,6 +21,71 @@
 <link rel="stylesheet" th:href="@{/css/demo.css}" />
 
 </head>
+<style>
+body {
+	font-family: "Noto Sans TC", sans-serif;
+}
+
+#edit, #delete {
+	padding: 0.3rem 0.75rem;
+	cursor: pointer;
+	color: white;
+	border: none;
+	border-radius: 10px
+}
+
+#edit {
+	background-color: #0071e3;
+	margin-bottom: 0.3rem;
+}
+
+#edit:hover {
+	background-color: #2894FF;
+}
+
+#delete {
+	background-color: #CE0000;
+}
+
+#delete:hover {
+	background-color: #FF5151;
+}
+
+#dt-search-0 {
+	margin-right: 2rem
+}
+
+#dt-search-0:focus {
+	outline: none;
+}
+
+#addData {
+	padding: 0.5rem 1.25rem !important;
+	font-size: 1rem !important;
+	width: auto;
+	height: auto;
+	color: white;
+	background-color: #0071e3;
+	border: none;
+	border-radius: 0;
+	font-weight: normal;
+}
+
+#addData:hover {
+	background-color: #2894FF;
+}
+
+.modal-content {
+	min-width: 700px;
+	height: 700px;
+	overflow: auto;
+}
+
+body .modal .modal-content form textarea {
+	width: 350px
+}
+
+</style>
 <body>
 
 	<script th:src="@{/jquery/jquery-3.7.1.js}"></script>
@@ -79,7 +145,7 @@
 
 										<td th:text="${menu.ID}"></td>
 										<td th:text="${menu.productName}" width="100px"></td>
-										<td><img th:src="@{/Bistro/download(ID=${menu.ID})}"
+										<td><img th:src="@{/Bistro/download?type=menu&(ID=${menu.ID})}"
 											alt="商品照片" width="100"></td>
 										<td th:text="${menu.productPrice}"></td>
 										<td th:text="${menu.productCategory}"></td>
@@ -140,27 +206,20 @@
 				</section>
 			</main>
 
+			
+			<div id="lowStockModal" class="modal"
+				th:if="${lowStockItems != null and lowStockItems.size() > 0}">
+				<div class="modal-content">
 
-			<th:block>
-				<div id="lowStockModal" class="modal"
-					th:if="${lowStockItems != null and lowStockItems.size() > 0}">
-					<div class="modal-content">
-
-						<span class="close">&times;</span>
-						<h2>庫存不足的商品</h2>
-						<ul id="lowStockList" th:each="lowStockItem : ${lowStockItems}">
-							<li th:text="${lowStockItem}"></li>
-						</ul>
-					</div>
+					<span class="close">&times;</span>
+					<h2>庫存不足的商品</h2>
+					<ul id="lowStockList" th:each="lowStockItem : ${lowStockItems}">
+						<li th:text="${lowStockItem}"></li>
+					</ul>
 				</div>
-			</th:block>
+			</div>
 
-
-
-
-
-
-
+			
 
 			<!-- -------------------------跳出表單 新增商品------------------------ -->
 			<div id="addEventModal" class="modal">
@@ -199,8 +258,9 @@
 									onchange="previewImage(event)" />
 							</div>
 
-							<div id="previewContainer" style="display: none">
-								<img id="preview" alt="商品照片" width="200" class="question">
+							<!-- <div id="previewContainer" style="display: none"> -->
+							<div id="previewContainer" class="question" style="display: none" >
+								<img id="preview" alt="商品照片" width="200">
 							</div>
 
 							<div class="question">
@@ -311,7 +371,7 @@
 
 
 
-							<div id="previewContainer2">
+							<div id="previewContainer2" class="question" style="display: none">
 								<img id="preview2" alt="商品照片" width="200" src="" />
 							</div>
 
@@ -411,8 +471,8 @@
       window.onclick = function (event) {
         const modal = document.getElementById("addEventModal");
         const modal2 = document.getElementById("addEventModal2");
-        let lowStockModal = document.getElementById("lowStockModal");
-        if (event.target == modal || event.target == modal2) {
+        const lowStockModal = document.getElementById("lowStockModal");
+        if (event.target == modal || event.target == modal2|| event.target == lowStockModal) {
           document.getElementById("addEventModal").style.display = "none";
           document.getElementById("addEventModal2").style.display = "none";
           document.getElementById("lowStockModal").style.display = "none";
@@ -441,21 +501,19 @@
         let previewContainer = document.getElementById('previewContainer');
         
         let preview2 = document.getElementById('preview2');
-        let previewContainer2 = document.getElementById('previewContainer2');
         
         previewContainer.style.display="block";
-        previewContainer2.style.display="block";
          
         preview.src = URL.createObjectURL(event.target.files[0]);
         preview2.src = URL.createObjectURL(event.target.files[0]);
         
-        preview.onload = function() {
-            URL.revokeObjectURL(preview.src); 
-        }
-         preview2.onload = function() {
-            URL.revokeObjectURL(preview2.src); 
-        }
-    }
+	        preview.onload = function() {
+	            URL.revokeObjectURL(preview.src); 
+	        }
+	         preview2.onload = function() {
+	            URL.revokeObjectURL(preview2.src); 
+	        }
+    	}
       	
       	function resetPreview() {
         let preview = document.getElementById('preview');
@@ -467,10 +525,11 @@
 
 
 function loadImage(productId, previewId) {
-    const imageUrl = `/Bistro/download?ID=${productId}`;
+    const imageUrl = `/Bistro/download?type=menu&ID=${productId}`;
+    let previewContainer2 = document.getElementById('previewContainer2');
     const preview = document.getElementById(previewId);
     preview.src = imageUrl;
-    preview.style.display = "block";
+    previewContainer2.style.display = "block";
 
 }
 

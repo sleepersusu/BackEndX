@@ -149,15 +149,29 @@ header{
     text-align: end;
     width: 85%;
     position: fixed;
+    display: flex;
+    justify-content: flex-end;
     align-content: center;
     padding-bottom: 10px;
     z-index:1;
 }
 
+.Timebox{
+padding-left: 15px;
+padding-right: 15px;
+transform: scale(0.95);  /* 将元素缩小 */
+transform-origin: center;  /* 保证缩放从中心开始 */
+border-radius: 18px;
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: 0 0 0 0.7px black;
+margin-right: 5px;
+}
 
 header button{
     margin-right: 50px;
-    margin-top: 10px;
+
     width: 53px;
     height: 35px;
     border-radius: 5px;
@@ -166,11 +180,11 @@ header button{
 
 header button:hover,.dataButton:hover{
     background-color:gray;
-    color : white;
+    color : black;
 }
 /* main header 登出 CSS設定結束 ----------*/
 
-h2{
+main h2{
     margin-top: 10px;
 }
 
@@ -179,6 +193,7 @@ main{
     width: 90%;
     padding-left: 100px;
     padding-top:60px;
+    padding-bottom: 5%;
     z-index: 0.9;
 }
 
@@ -263,7 +278,8 @@ td img{
 
 
 footer{
-    margin-top: 100px;
+    position: sticky;
+    bottom: 0;
     background-color: lightgray;
     border-top: 1px gray solid;
     text-align: center;
@@ -558,4 +574,13 @@ body .modal .modal-content {
 
 #logout:hover{
 	background-color: #F0F0F0;
+}
+
+.ellipsis {
+    white-space: nowrap;         /* 防止换行 */
+    overflow: hidden;            /* 隐藏溢出的内容 */
+    text-overflow: ellipsis;     /* 显示省略号 */
+}
+.center {
+text-align: center;
 }

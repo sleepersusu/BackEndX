@@ -7,13 +7,11 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.example.bistro.cart.Cart;
 import com.example.bistro.comment.Comment;
 import com.example.bistro.orders.Orders;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -41,7 +39,6 @@ public class Members {
 	private Integer id;
 	@Column(unique=true,nullable = false)
 	private String memberAccount;
-	@Column(nullable = false)
 	private String memberPassword;
 	private String memberName;
 	private Short memberAge;
@@ -60,23 +57,30 @@ public class Members {
 	private byte[] memberImg;
 	private Integer memberPoint;
 	private String memberStatus;
+	private String memberShip; //會員or非會員
 	
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-	
-    // 一對一：每個會員只有一個購物車
-    @OneToOne(mappedBy = "members", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Cart cart;  // 每個會員只有一個購物車
-// 一對多：一個會員可以有很多訂單
+
+	//後面就不用set時間
+	@PrePersist
+	public void onCreate() {
+		if(createdAt == null) {
+			createdAt = new Date();
+		}
+	}
+
+
+	// 一對多：一個會員可以有很多訂單
     @JsonIgnore
-    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "members", orphanRemoval = true)
     private List<Orders> orders = new ArrayList<>(); // 會員可以有多個訂單
     
     @JsonIgnore
-      @OneToMany(mappedBy = "members",fetch = FetchType.LAZY)
-      private List<Comment> comments =new ArrayList<Comment>(); 
+	@OneToMany(mappedBy = "members",fetch = FetchType.LAZY)
+	private List<Comment> comments =new ArrayList<Comment>();
      // 用於映射 Comment 實體中的 members 
 
 	

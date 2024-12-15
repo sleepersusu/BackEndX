@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = "/Bistro/*")
+//@WebFilter(urlPatterns = "/Bistro/*")//不需要已在Config宣告此項目
 public class LoginFilter implements Filter {
 
 	@Override
@@ -25,7 +25,8 @@ public class LoginFilter implements Filter {
 
 		HttpSession session = httpRequest.getSession(false);
 
-		if (session != null && session.getAttribute("loginAccount") != null) {
+		if (session != null && session.getAttribute("loginId") != null) {
+			System.out.println("判斷session沒銷毀");
 			long maxInactiveInterval = session.getMaxInactiveInterval()* 1000; // 转换为毫秒
 			session.setAttribute("maxInactiveInterval", maxInactiveInterval);
 			long currentTime = System.currentTimeMillis();
