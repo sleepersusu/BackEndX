@@ -55,7 +55,8 @@ public class MemberService {
 		return Optional.empty();
 	}
 	
-	public void updateMember(Members memberBean) {
+	public String updateMember(Members memberBean) {
 		memberRepo.save(memberBean);
+		return "更新完成";
 	}
 }

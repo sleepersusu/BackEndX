@@ -64,13 +64,14 @@ public class ImageService {
 				if(Membersbyte!=null) {
 					MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM; // 默認為通用二進位流
 					
-					mediaType = MediaType.IMAGE_JPEG;
+					mediaType = getImageMediaType(Membersbyte);
 					
 					HttpHeaders httpHeaders = new HttpHeaders();
 					httpHeaders.setContentType(mediaType);
 					
 					return new ResponseEntity<byte[]>(Membersbyte, httpHeaders, HttpStatus.OK);
 				}else {
+					//return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 					return ResponseEntity.status(HttpStatus.OK).build();
 				}
 			}
@@ -107,6 +108,27 @@ public class ImageService {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
 		}
+	}
+	private MediaType getImageMediaType(byte[] imageBytes) {
+	    // JPEG 文件判断
+	    if (imageBytes.length > 3 && imageBytes[0] == (byte) 0xFF && imageBytes[1] == (byte) 0xD8 && imageBytes[2] == (byte) 0xFF) {
+	    	return MediaType.IMAGE_JPEG;
+	    }
+	    // PNG 文件判断
+	    if (imageBytes.length > 4 && imageBytes[0] == (byte) 0x89 && imageBytes[1] == (byte) 0x50 && imageBytes[2] == (byte) 0x4E && imageBytes[3] == (byte) 0x47) {
+	    	return MediaType.IMAGE_PNG;
+	    }
+	    // GIF 文件判断
+	    if (imageBytes.length > 6 && imageBytes[0] == (byte) 0x47 && imageBytes[1] == (byte) 0x49 && imageBytes[2] == (byte) 0x46 && 
+	        (imageBytes[3] == (byte) 0x38 && (imageBytes[4] == (byte) 0x39 || imageBytes[4] == (byte) 0x37)) && imageBytes[5] == (byte) 0x61) {
+	        return MediaType.IMAGE_GIF;
+	    }
+	    // WEBP 文件判断
+	    if (imageBytes.length > 3 && imageBytes[0] == (byte) 0x52 && imageBytes[1] == (byte) 0x49 && imageBytes[2] == (byte) 0x46 && imageBytes[3] == (byte) 0x46) {
+	        return MediaType.valueOf("image/webp");
+	    }
+	    // 如果无法识别图片类型，返回 null
+	    return null;
 	}
 
 }

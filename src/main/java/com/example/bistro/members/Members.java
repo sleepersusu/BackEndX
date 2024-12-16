@@ -67,8 +67,8 @@ public class Members {
 	//後面就不用set時間
 	@PrePersist
 	public void onCreate() {
-		if(createdAt == null) {
-			createdAt = new Date();
+		if(this.createdAt == null) {
+			this.createdAt = new Date();
 		}
 	}
 

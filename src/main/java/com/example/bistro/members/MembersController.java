@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.bistro.config.ImageService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -20,6 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class MembersController {
     @Autowired
     private MemberService memberService;
+    
+	@Autowired
+	private ImageService imageService;
 
     @GetMapping("/Bistro/Member/getMembersInfo")
     public ResponseEntity<Map<String, Object>> getMembersInfo(
@@ -57,33 +63,53 @@ public class MembersController {
     @Transactional
     @PostMapping("/Bistro/Member/UpdateMember")
     public String updateMember(@ModelAttribute Members memberBean,@RequestParam("memberPhoto") MultipartFile file) {
+    	String type = "member";
     	Members dbMember = memberService.findMembersById(memberBean.getId());
-    	System.out.println("MemberStatus:"+memberBean.getId());
-        System.out.println("Account:"+memberBean.getMemberAccount());
-        System.out.println("Password:"+memberBean.getMemberPassword());
-        System.out.println("Name:"+memberBean.getMemberName());
-        System.out.println("Email:"+memberBean.getMemberEmail());
-        System.out.println("Phone:"+memberBean.getMemberPhone());
         memberBean.setMemberShip(dbMember.getMemberShip());
-        System.out.println("MemberShip:"+memberBean.getMemberShip());
-        System.out.println("MemberFavor:"+memberBean.getMemberFavor());
-        System.out.println("Sex:"+memberBean.getMemberSex());
-        System.out.println("Address:"+memberBean.getMemberAddress());
         memberBean.setMemberStatus(dbMember.getMemberStatus());
-        System.out.println("Status:"+memberBean.getMemberStatus());
+        memberBean.setCreatedAt(dbMember.getCreatedAt());
             try {
             	if (file != null && !file.isEmpty()) {
                     byte[] fileBytes = file.getBytes(); // 轉成 byte[]
-                    memberBean.setMemberImg(fileBytes); 
+                    imageService.imageUpload(type, memberBean.getId(), fileBytes);
+                    memberBean.setMemberImg(fileBytes);
             	}else {
-            		memberBean.setMemberImg(memberBean.getMemberImg()); 
+            		memberBean.setMemberImg(dbMember.getMemberImg());
             	}
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        System.out.println("MemberImg:"+memberBean.getMemberImg());
-        return "member/membersView";
+            String result = memberService.updateMember(memberBean);
+            System.out.println(result);
+        return "redirect:/Bistro/Member/findAllMembers";
     }
     
+    @Transactional
+    @PostMapping("/Bistro/Member/postMember")
+    public String createNewMember(@ModelAttribute Members memberBean,@RequestParam("memberPhoto") MultipartFile file) {
+    	String memberShip = "會員";
+    	String memberStatus = "啟用";
+    	String name = memberBean.getMemberName();
+    	String phone = memberBean.getMemberPhone();
+    	Members dbMember = memberService.findMembers(name, phone);
+    	if(dbMember==null) {
+    		memberBean.setMemberShip(memberShip);
+    		memberBean.setMemberStatus(memberStatus);
+    		memberBean.setMemberPoint(0);
+        	try {
+        		if (file != null && !file.isEmpty()) {
+        			byte[] fileBytes = file.getBytes(); // 轉成 byte[]
+        			memberBean.setMemberImg(fileBytes); 
+        		}
+        	} catch (IOException e) {
+        		e.printStackTrace();
+        	}
+        	memberService.insertMember(memberBean);
+    		return "redirect:/Bistro/Member/findAllMembers";
+    	}else {
+    		System.out.println("新增失敗，資料已存在");
+    	}
+    	return "redirect:/Bistro/Member/findAllMembers";
+    }
     
 }
